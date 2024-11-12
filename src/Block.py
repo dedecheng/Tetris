@@ -21,3 +21,24 @@ class Block():
         self.centroid = [0, 0]  # 重心x,y座標
         self.type = BlockType.I  # BlockType
         self.direction = Direction.initial  # 方向
+
+    def rotate_left(self, board, w, h):
+        pass
+
+    def rotate_right(self, board, w, h):
+        pass
+
+    def is_valid(self, board, w, h):
+        pass
+
+    def move_right(self, board, w, h):
+        pass
+
+    def move_left(self, board, w, h):
+        pass
+
+    def move_down(self, board, w, h):
+        pass
+
+    def straight_down(self, board, w, h):
+        pass
