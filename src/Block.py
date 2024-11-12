@@ -18,9 +18,10 @@ class Direction(Enum):
 
 class Block():
     def __init__(self):
-        self.centroid = [0, 0]  # 重心x,y座標
+        self.pos = [0, 0]  # 重心x,y座標
         self.type = BlockType.I  # BlockType
         self.direction = Direction.initial  # 方向
+        self.touch_ground = 0 #接觸地板時間
 
     def rotate_left(self, board, w, h):
         pass
@@ -41,4 +42,7 @@ class Block():
         pass
 
     def straight_down(self, board, w, h):
+        pass
+
+    def ground_touched(self, board, w, h):
         pass
