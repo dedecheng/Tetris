@@ -1,5 +1,7 @@
 from enum import Enum
 
+import Board
+
 class BlockType(Enum):
     I = 1
     J = 2
@@ -65,7 +67,7 @@ class Block():
         else:
             return []  # 默認情況返回空
     
-    def rotate_left(self, board, w, h):
+    def rotate_left(self, w, h):
         old_direction = self.direction
         new_direction = Direction((self.direction.value - 1) % 4)
     
@@ -73,13 +75,13 @@ class Block():
         new_cells = [(-y, x) for x, y in self.cells]
     
         # wall kick
-        if self.kick_wall(board, w, h, new_cells, old_direction, new_direction):
+        if self.kick_wall(self, w, h, new_cells, old_direction, new_direction):
         # 成功更新方向
             self.direction = new_direction
         else:
             pass
                         
-    def rotate_right(self, board, w, h):
+    def rotate_right(self, w, h):
         old_direction = self.direction
         new_direction = Direction((self.direction.value + 1) % 4)
     
@@ -87,13 +89,13 @@ class Block():
         new_cells = [(y, -x) for x, y in self.cells]
     
         # wall kick
-        if self.kick_wall(board, w, h, new_cells, old_direction, new_direction):
+        if self.kick_wall(self, w, h, new_cells, old_direction, new_direction):
         # 成功更新方向
             self.direction = new_direction
         else:
             pass
        
-    def kick_wall(self, board, w, h, new_cells, old_direction, new_direction):
+    def kick_wall(self, w, h, new_cells, old_direction, new_direction):
         if self.type == BlockType.O:
             pass  # O 型不需要 wall kick
         elif self.type == BlockType.I:
@@ -104,7 +106,7 @@ class Block():
         for offset_x, offset_y in offsets:
             # 計算應用偏移後的新格子
             adjusted_cells = [(x + offset_x, y + offset_y) for x, y in new_cells]
-            if self.is_valid(board, w, h, adjusted_cells):
+            if self.is_valid(w, h, adjusted_cells):
                 self.cells = adjusted_cells
                 self.pos[0] += offset_x
                 self.pos[1] += offset_y
@@ -113,11 +115,11 @@ class Block():
         return False  # 檢查所有偏移量後，若都無法有效旋轉，返回 False
 
          
-    def is_valid(self, board, w, h, cells):
+    def is_valid(self, w, h, cells):
      for x, y in cells:
          if x < 0 or x >= w or y < 0 or y >= h:  # 超出邊界
              return False
-         if board[y][x] != 0:  # 與其他方塊重疊
+         if Board[y][x] != 0:  # 與其他方塊重疊
              return False
      return True
 
