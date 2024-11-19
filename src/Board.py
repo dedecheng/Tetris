@@ -2,11 +2,10 @@ from src.Block import BlockType, Block
 
 
 class Board:
-    def __init__(self):
-        self.width = 10
-        self.height = 20
+    def __init__(self, w, h):
+        self.width = w
+        self.height = h
         self.board = [[None] * self.width for _ in range(self.height)]
-        self.active_block = Block()
         self.hold = BlockType.I
 
     def place_block(self, block):

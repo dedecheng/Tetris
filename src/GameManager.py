@@ -4,7 +4,7 @@ import copy
 class GameManager:
     def __init__(self, w, h):
         self.current_block = Block(BlockType.I, 0, 7, 10)  # 初始方塊
-        self.board = Board()
+        self.board = Board(w, h)
         self.w = w
         self.h = h
 
@@ -13,7 +13,7 @@ class GameManager:
         new_direction = Direction((self.current_block.direction.value + 3) % 4)
 
         # 計算旋轉後的新格子
-        new_cells = [(-y, x) for x, y in self.cells]
+        new_cells = [(-y, x) for x, y in self.current_block.cells]
 
         # wall kick
         if self.kick_wall(self, new_cells, old_direction, new_direction):
@@ -80,13 +80,13 @@ class GameManager:
 
     def move_down(self):
         self.current_block.pos[1] -= 1
-        if self.is_valid():
+        if not self.is_valid():
             self.current_block.pos[1] += 1
 
     def straight_down(self):
-        self.current_block.pos[1] = 0
-        if self.is_valid():
-            self.current_block.pos[1] = 0
+        for _ in range(self.board.height):
+            self.move_down()
+        self.place_block(self.current_block)
 
     def ground_touched(self):
         pass
