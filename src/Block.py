@@ -43,9 +43,9 @@ class Block:
         (Direction.initial, Direction.L): [(0, 0), (-1, 0), (2, 0), (-1, 2), (2, -1)],
     }
 
-    def __init__(self, block_type, direction):
+    def __init__(self, block_type, direction, x, y):
         self.cells = self.initial_cell(block_type)  # 相對於重心的位置
-        self.pos = [0, 0]  # 重心的 (x, y) 座標
+        self.pos = [x, y]  # 重心的 (x, y) 座標
         self.type = block_type  # BlockType
         self.direction = direction  # 方向
         self.touch_ground = 0  # 接觸地板時間
@@ -70,7 +70,7 @@ class Block:
 
     def rotate_left(self, w, h):
         old_direction = self.direction
-        new_direction = Direction((self.direction.value - 1) % 4)
+        new_direction = Direction((self.direction.value + 3) % 4)
 
         # 計算旋轉後的新格子
         new_cells = [(-y, x) for x, y in self.cells]

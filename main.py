@@ -8,6 +8,8 @@ pygame.init()
 WINDOW_WIDTH = 300
 WINDOW_HEIGHT = 600
 GRID_SIZE = 30  # 方塊大小
+width = 10
+height = 20
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris")
 clock = pygame.time.Clock()
@@ -15,13 +17,13 @@ clock = pygame.time.Clock()
 def game_loop():
     running = True
     board = Board()
-    current_block = Block()  # 初始方塊
+    current_block = Block(BlockType.I, 0, 7, 10)  # 初始方塊
 
     fall_time = 0
     fall_speed = 500  # 每 500 毫秒下墜一次
 
     while running:
-        screen.fill((0, 0, 0))
+        screen.fill((0, 0, 0))  # 將整個螢幕設置為黑色背景
         delta_time = clock.tick(60)
         fall_time += delta_time
 
