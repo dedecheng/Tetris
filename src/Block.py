@@ -2,6 +2,16 @@ from enum import Enum
 import copy
 import Board
 
+block_color = [
+    (0, 255, 255),
+    (0, 0, 255),
+    (255, 165, 0),
+    (255, 255, 0),
+    (0, 255, 0),
+    (255, 0, 255),
+    (255, 0, 0)
+]
+
 class BlockType(Enum):
     I = 1
     J = 2
