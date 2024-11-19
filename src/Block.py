@@ -126,15 +126,31 @@ class Block:
         return True
 
     def move_right(self, board, w, h):
+        newBlock = self;
+        newBlock.pos[0] + 1;
+        if newBlock.is_valid(newBlock, board, w, h):
+            self = newBlock;
         pass
 
     def move_left(self, board, w, h):
+        newBlock = self;
+        newBlock.pos[0] - 1;
+        if newBlock.is_valid(newBlock, board, w, h):
+            self = newBlock;
         pass
 
     def move_down(self, board, w, h):
+        newBlock = self;
+        newBlock.pos[1] - 1;
+        if newBlock.is_valid(newBlock, board, w, h):
+            self = newBlock;
         pass
 
     def straight_down(self, board, w, h):
+        newBlock = self;
+        newBlock.pos[1] = 0;
+        if newBlock.is_valid(newBlock, board, w, h):
+            self = newBlock;
         pass
 
     def ground_touched(self, board, w, h):
