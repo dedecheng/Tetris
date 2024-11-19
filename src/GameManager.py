@@ -13,10 +13,10 @@ class GameManager:
         new_direction = Direction((self.current_block.direction.value + 3) % 4)
 
         # 計算旋轉後的新格子
-        new_cells = [(-y, x) for x, y in self.cells]
+        new_cells = [(-y, x) for x, y in self.current_block.cells]
 
         # wall kick
-        if self.kick_wall(self, new_cells, old_direction, new_direction):
+        if self.kick_wall(new_cells, old_direction, new_direction):
             # 成功更新方向
             self.current_block.direction = new_direction
         else:
@@ -30,13 +30,13 @@ class GameManager:
         new_cells = [(y, -x) for x, y in self.current_block.cells]
 
         # wall kick
-        if self.kick_wall(self, self.w, self.h, new_cells, old_direction, new_direction):
+        if self.kick_wall(new_cells, old_direction, new_direction):
             # 成功更新方向
             self.current_block.direction = new_direction
         else:
             pass
 
-    def kick_wall(self, w, h, new_cells, old_direction, new_direction):
+    def kick_wall(self, new_cells, old_direction, new_direction):
         if self.current_block.type == BlockType.O:
             pass  # O 型不需要 wall kick
         elif self.current_block.type == BlockType.I:
@@ -80,7 +80,7 @@ class GameManager:
 
     def move_down(self):
         self.current_block.pos[1] -= 1
-        if self.is_valid():
+        if not self.is_valid():
             self.current_block.pos[1] += 1
 
     def straight_down(self):
@@ -90,3 +90,8 @@ class GameManager:
 
     def ground_touched(self):
         pass
+
+    def place_block(self):
+        self.board.place_block(self.current_block)
+        # TODO
+        # 放完之後，生成新方塊
