@@ -115,11 +115,13 @@ class Block:
 
         return False  # 檢查所有偏移量後，若都無法有效旋轉，返回 False
 
-    def is_valid(self, w, h, cells):
-        for x, y in cells:
+    def is_valid(self, w, h, block, board):
+        for x, y in block.cells:
+            x += self.pos[0]
+            y += self.pos[1]
             if x < 0 or x >= w or y < 0 or y >= h:  # 超出邊界
                 return False
-            if Board[y][x] != 0:  # 與其他方塊重疊
+            if board[x][y] is not None:  # 與其他方塊重疊
                 return False
         return True
 
