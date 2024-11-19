@@ -14,6 +14,7 @@ screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris")
 clock = pygame.time.Clock()
 
+
 def game_loop():
     running = True
     game_manager = GameManager(width, height)
@@ -54,20 +55,17 @@ def game_loop():
             for j in range(len(game_manager.board.board[i])):  # 遍歷元素的索引
                 cell = game_manager.board.board[i][j]
                 if cell:
-                    pygame.draw.rect(screen, cell, ((width-i) * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE))
-        for y, row in enumerate(game_manager.board.grid):
-            for x, cell in enumerate(row):
-                if cell:
-                    pygame.draw.rect(screen, cell, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE))
+                    color = Block.block_color[cell.value]
+                    pygame.draw.rect(screen, color, (i * GRID_SIZE, (height - j - 1) * GRID_SIZE, GRID_SIZE, GRID_SIZE))
 
         # 繪製方塊
-        for y, row in enumerate(current_block.shape):
-            for x, cell in enumerate(row):
-                if cell:
-                    grid_x = current_block.position[0] + x
-                    grid_y = current_block.position[1] + y
-                    pygame.draw.rect(screen, current_block.color,
-                                     (grid_x * GRID_SIZE, grid_y * GRID_SIZE, GRID_SIZE, GRID_SIZE))
+        for x, y in game_manager.current_block.cells:
+            x += game_manager.current_block.pos[0]
+            y += game_manager.current_block.pos[1]
+            cell = game_manager.current_block.type
+            if cell:
+                color = Block.block_color[cell.value]
+                pygame.draw.rect(screen, color, (x * GRID_SIZE, (height - y - 1) * GRID_SIZE, GRID_SIZE, GRID_SIZE))
 
         pygame.display.flip()
 

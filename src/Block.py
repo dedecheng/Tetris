@@ -1,16 +1,6 @@
 from enum import Enum
-import copy
-import Board
 
-block_color = [
-    (0, 255, 255),
-    (0, 0, 255),
-    (255, 165, 0),
-    (255, 255, 0),
-    (0, 255, 0),
-    (255, 0, 255),
-    (255, 0, 0)
-]
+
 
 class BlockType(Enum):
     I = 1
@@ -52,6 +42,15 @@ class Block:
         (Direction.initial, Direction.L): [(0, 0), (-1, 0), (2, 0), (-1, 2), (2, -1)],
     }
 
+    block_color = [
+        (0, 255, 255),
+        (0, 0, 255),
+        (255, 165, 0),
+        (255, 255, 0),
+        (0, 255, 0),
+        (255, 0, 255),
+        (255, 0, 0)
+    ]
     def __init__(self, block_type, direction, x, y):
         self.cells = self.initial_cell(block_type)  # 相對於重心的位置
         self.pos = [x, y]  # 重心的 (x, y) 座標
