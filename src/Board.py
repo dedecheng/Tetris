@@ -13,3 +13,6 @@ class Board:
         # 消行
         # 生成方塊
         pass
+
+    def place_block(self):
+        pass
