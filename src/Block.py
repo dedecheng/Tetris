@@ -16,7 +16,7 @@ class Direction(Enum):
     L = 3
 
 
-class Block():
+class Block:
     def __init__(self):
         self.pos = [0, 0]  # 重心x,y座標
         self.type = BlockType.I  # BlockType
@@ -33,15 +33,31 @@ class Block():
         pass
 
     def move_right(self, board, w, h):
+        newBlock = self;
+        newBlock.pos[0] + 1;
+        if newBlock.is_valid(newBlock, board, w, h):
+            self = newBlock;
         pass
 
     def move_left(self, board, w, h):
+        newBlock = self;
+        newBlock.pos[0] - 1;
+        if newBlock.is_valid(newBlock, board, w, h):
+            self = newBlock;
         pass
 
     def move_down(self, board, w, h):
+        newBlock = self;
+        newBlock.pos[1] - 1;
+        if newBlock.is_valid(newBlock, board, w, h):
+            self = newBlock;
         pass
 
     def straight_down(self, board, w, h):
+        newBlock = self;
+        newBlock.pos[1] = 0;
+        if newBlock.is_valid(newBlock, board, w, h):
+            self = newBlock;
         pass
 
     def ground_touched(self, board, w, h):
