@@ -3,13 +3,13 @@ from enum import Enum
 
 
 class BlockType(Enum):
-    I = 1
-    J = 2
-    L = 3
-    O = 4
-    S = 5
-    Z = 6
-    T = 7
+    I = 0
+    J = 1
+    L = 2
+    O = 3
+    S = 4
+    Z = 5
+    T = 6
 
 
 class Direction(Enum):

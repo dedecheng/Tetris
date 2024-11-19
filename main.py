@@ -46,7 +46,7 @@ def game_loop():
         # 自動下墜
         if fall_time > fall_speed:
             game_manager.move_down()
-            if game_manager.ground_touched:
+            if game_manager.ground_touched():
                 game_manager.place_block()
             fall_time = 0
 
@@ -56,7 +56,7 @@ def game_loop():
                 cell = game_manager.board.board[i][j]
                 if cell:
                     color = Block.block_color[cell.value]
-                    pygame.draw.rect(screen, color, (i * GRID_SIZE, (height - j - 1) * GRID_SIZE, GRID_SIZE, GRID_SIZE))
+                    pygame.draw.rect(screen, color, (j * GRID_SIZE, (height - i - 1) * GRID_SIZE, GRID_SIZE, GRID_SIZE))
 
         # 繪製方塊
         for x, y in game_manager.current_block.cells:
@@ -67,6 +67,7 @@ def game_loop():
                 color = Block.block_color[cell.value]
                 pygame.draw.rect(screen, color, (x * GRID_SIZE, (height - y - 1) * GRID_SIZE, GRID_SIZE, GRID_SIZE))
 
+        
         pygame.display.flip()
 
     pygame.quit()

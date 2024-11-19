@@ -8,9 +8,10 @@ class Board:
         self.board = [[None] * self.width for _ in range(self.height)]
         self.hold = BlockType.I
 
+
     def place_block(self, block):
         for cell in block.cells:
-            self.board[cell[1]][cell[0]] = block.type
+            self.board[block.pos[1] + cell[1]][block.pos[0] + cell[0]] = block.type
 
         self.clear_full_lines()
 

@@ -3,7 +3,7 @@ import copy
 
 class GameManager:
     def __init__(self, w, h):
-        self.current_block = Block(BlockType.I, 0, 7, 10)  # 初始方塊
+        self.current_block = Block(BlockType.L, Direction.initial, 7, 10)  # 初始方塊
         self.board = Board(w, h)
         self.w = w
         self.h = h
@@ -64,7 +64,7 @@ class GameManager:
             y += self.current_block.pos[1]
             if x < 0 or x >= self.w or y < 0 or y >= self.h:  # 超出邊界
                 return False
-            if self.board.board[x][y] is not None:  # 與其他方塊重疊
+            if self.board.board[y][x] is not None:  # 與其他方塊重疊
                 return False
         return True
 
@@ -86,12 +86,20 @@ class GameManager:
     def straight_down(self):
         for _ in range(self.board.height):
             self.move_down()
-        self.place_block(self.current_block)
+        self.place_block()
 
     def ground_touched(self):
-        pass
+        self.current_block.pos[1] -= 1
+        if not self.is_valid():
+            self.current_block.pos[1] += 1
+            return True
+        self.current_block.pos[1] += 1
+        return False
+
 
     def place_block(self):
         self.board.place_block(self.current_block)
         # TODO
         # 放完之後，生成新方塊
+        self.current_block = Block(BlockType.L, Direction.initial, 7, 10)
+
