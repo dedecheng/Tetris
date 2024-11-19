@@ -33,15 +33,15 @@ def game_loop():
                 running = False
             if event.type == KEYDOWN:
                 if event.key == K_LEFT:
-                    current_block.move_left()
+                    current_block.move_left(board.board, width, height)
                 elif event.key == K_RIGHT:
-                    current_block.move_right()
+                    current_block.move_right(board.board, width, height)
                 elif event.key == K_DOWN:
-                    current_block.move_down()
+                    current_block.move_down(board.board, width, height)
                 elif event.key == K_UP:
-                    current_block.rotate_right()
+                    current_block.rotate_right(board.board, width, height)
                 elif event.key == K_z:
-                    current_block.rotate_left()
+                    current_block.rotate_left(board.board, width, height)
 
         # 自動下墜
         if fall_time > fall_speed:

@@ -1,7 +1,6 @@
 from enum import Enum
-
+import copy
 import Board
-
 
 class BlockType(Enum):
     I = 1
@@ -68,7 +67,7 @@ class Block:
         else:
             return []  # 默認情況返回空
 
-    def rotate_left(self, w, h):
+    def rotate_left(self, w, h,board):
         old_direction = self.direction
         new_direction = Direction((self.direction.value + 3) % 4)
 
@@ -76,7 +75,7 @@ class Block:
         new_cells = [(-y, x) for x, y in self.cells]
 
         # wall kick
-        if self.kick_wall(self, w, h, new_cells, old_direction, new_direction):
+        if self.kick_wall(self, w, h, new_cells, old_direction, new_direction, board):
             # 成功更新方向
             self.direction = new_direction
         else:
@@ -107,7 +106,7 @@ class Block:
         for offset_x, offset_y in offsets:
             # 計算應用偏移後的新格子
             adjusted_cells = [(x + offset_x, y + offset_y) for x, y in new_cells]
-            if self.is_valid(w, h, adjusted_cells):
+            if self.is_valid(w, h, adjusted_cells, board):
                 self.cells = adjusted_cells
                 self.pos[0] += offset_x
                 self.pos[1] += offset_y
@@ -126,32 +125,28 @@ class Block:
         return True
 
     def move_right(self, board, w, h):
-        newBlock = self;
-        newBlock.pos[0] + 1;
-        if newBlock.is_valid(newBlock, board, w, h):
-            self = newBlock;
-        pass
+        newBlock = copy.deepcopy(self)
+        newBlock.pos[0] += 1
+        if self.is_valid(w, h, newBlock, board):
+            self.pos[0] += 1
 
     def move_left(self, board, w, h):
-        newBlock = self;
-        newBlock.pos[0] - 1;
-        if newBlock.is_valid(newBlock, board, w, h):
-            self = newBlock;
-        pass
+        newBlock = copy.deepcopy(self)
+        newBlock.pos[0] -= 1
+        if self.is_valid(w, h, newBlock, board):
+            self.pos[0] -= 1
 
     def move_down(self, board, w, h):
-        newBlock = self;
-        newBlock.pos[1] - 1;
-        if newBlock.is_valid(newBlock, board, w, h):
-            self = newBlock;
-        pass
+        newBlock = copy.deepcopy(self)
+        newBlock.pos[1] -= 1
+        if self.is_valid(w, h, newBlock, board):
+            self.pos[1] -= 1
 
     def straight_down(self, board, w, h):
-        newBlock = self;
-        newBlock.pos[1] = 0;
-        if newBlock.is_valid(newBlock, board, w, h):
-            self = newBlock;
-        pass
+        newBlock = copy.deepcopy(self)
+        newBlock.pos[1] = 0
+        if self.is_valid(w, h, newBlock, board):
+            self.pos[1] = 0
 
     def ground_touched(self, board, w, h):
         pass
