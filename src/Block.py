@@ -16,7 +16,7 @@ class Direction(Enum):
     L = 3
 
 
-class Block():
+class Block:
     def __init__(self):
         self.pos = [0, 0]  # 重心x,y座標
         self.type = BlockType.I  # BlockType
