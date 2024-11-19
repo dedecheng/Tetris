@@ -16,8 +16,7 @@ clock = pygame.time.Clock()
 
 def game_loop():
     running = True
-    board = Board()
-    current_block = Block(BlockType.I, 0, 7, 10)  # 初始方塊
+    game_manager = GameManager(width, height)
 
     fall_time = 0
     fall_speed = 500  # 每 500 毫秒下墜一次
@@ -33,26 +32,30 @@ def game_loop():
                 running = False
             if event.type == KEYDOWN:
                 if event.key == K_LEFT:
-                    current_block.move_left(board.board, width, height)
+                    game_manager.move_left()
                 elif event.key == K_RIGHT:
-                    current_block.move_right(board.board, width, height)
+                    game_manager.move_right()
                 elif event.key == K_DOWN:
-                    current_block.move_down(board.board, width, height)
+                    game_manager.move_down()
                 elif event.key == K_UP:
-                    current_block.rotate_right(board.board, width, height)
+                    game_manager.rotate_right()
                 elif event.key == K_z:
-                    current_block.rotate_left(board.board, width, height)
+                    game_manager.rotate_left()
 
         # 自動下墜
         if fall_time > fall_speed:
-            current_block.move_down()
-            if current_block.ground_touched:
-                board.place_block(current_block)
-                current_block = Block()  # 新的方塊
+            game_manager.move_down()
+            if game_manager.ground_touched:
+                game_manager.place_block()
             fall_time = 0
 
         # 繪製棋盤
-        for y, row in enumerate(board.grid):
+        for i in range(len(game_manager.board.board)):  # 遍歷列的索引
+            for j in range(len(game_manager.board.board[i])):  # 遍歷元素的索引
+                cell = game_manager.board.board[i][j]
+                if cell:
+                    pygame.draw.rect(screen, cell, ((width-i) * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE))
+        for y, row in enumerate(game_manager.board.grid):
             for x, cell in enumerate(row):
                 if cell:
                     pygame.draw.rect(screen, cell, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE))
