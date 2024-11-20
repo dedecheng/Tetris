@@ -27,7 +27,7 @@ def game_loop():
     current_touch_ground_times = 0
     while running:
         screen.fill((0, 0, 0))  # 將整個螢幕設置為黑色背景
-        delta_time = clock.tick(60)
+        delta_time = clock.tick(30)
         fall_time += delta_time
 
         # 玩家輸入
