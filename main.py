@@ -13,6 +13,9 @@ height = 20
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris")
 clock = pygame.time.Clock()
+bord_width = 2
+max_touch_ground_times = 3
+line_color = (50, 50, 50)  # 灰色
 
 
 def game_loop():
@@ -21,7 +24,7 @@ def game_loop():
 
     fall_time = 0
     fall_speed = 500  # 每 500 毫秒下墜一次
-
+    current_touch_ground_times = 0
     while running:
         screen.fill((0, 0, 0))  # 將整個螢幕設置為黑色背景
         delta_time = clock.tick(60)
@@ -45,12 +48,14 @@ def game_loop():
                 elif event.key == K_SPACE:
                     game_manager.straight_down()
 
-
         # 自動下墜
         if fall_time > fall_speed:
             game_manager.move_down()
             if game_manager.ground_touched():
-                game_manager.place_block()
+                current_touch_ground_times += 1
+                if current_touch_ground_times >= max_touch_ground_times:
+                    game_manager.place_block()
+                    current_touch_ground_times = 0
             fall_time = 0
 
         # 繪製棋盤
@@ -59,7 +64,12 @@ def game_loop():
                 cell = game_manager.board.board[i][j]
                 if cell:
                     color = Block.block_color[cell.value]
-                    pygame.draw.rect(screen, color, (j * GRID_SIZE, (height - i - 1) * GRID_SIZE, GRID_SIZE, GRID_SIZE))
+                    pygame.draw.rect(screen, color, (
+                        j * GRID_SIZE, (height - i - 1) * GRID_SIZE,
+                        GRID_SIZE, GRID_SIZE))
+                    # pygame.draw.rect(screen, color, (
+                    #     j * GRID_SIZE + bord_width, (height - i - 1) * GRID_SIZE + bord_width,
+                    #     GRID_SIZE - bord_width * 2, GRID_SIZE - bord_width * 2))
 
         # 繪製方塊
         for x, y in game_manager.current_block.cells:
@@ -68,8 +78,30 @@ def game_loop():
             cell = game_manager.current_block.type
             if cell:
                 color = Block.block_color[cell.value]
-                pygame.draw.rect(screen, color, (x * GRID_SIZE, (height - y - 1) * GRID_SIZE, GRID_SIZE, GRID_SIZE))
+                pygame.draw.rect(screen, color,
+                                 (x * GRID_SIZE, (height - y - 1) * GRID_SIZE,
+                                  GRID_SIZE, GRID_SIZE))
+                # pygame.draw.rect(screen, color,
+                #                  (x * GRID_SIZE + bord_width, (height - y - 1) * GRID_SIZE + bord_width,
+                #                   GRID_SIZE - bord_width * 2, GRID_SIZE - bord_width * 2))
 
+        # 繪製棋盤格線
+        for row in range(height + 1):  # 繪製水平線
+            pygame.draw.line(
+                screen,
+                line_color,
+                (0, row * GRID_SIZE),
+                (width * GRID_SIZE, row * GRID_SIZE),
+                1  # 線條寬度
+            )
+        for col in range(width + 1):  # 繪製垂直線
+            pygame.draw.line(
+                screen,
+                line_color,
+                (col * GRID_SIZE, 0),
+                (col * GRID_SIZE, height * GRID_SIZE),
+                1  # 線條寬度
+            )
 
         pygame.display.flip()
 

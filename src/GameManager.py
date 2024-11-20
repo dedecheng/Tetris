@@ -1,6 +1,7 @@
 from src import *
 import copy
 
+
 class GameManager:
     def __init__(self, w, h):
         self.current_block = Block(BlockType.L, Direction.initial, 7, 17)  # 初始方塊
@@ -44,19 +45,18 @@ class GameManager:
         else:
             offsets = Block.WALL_KICKS.get((old_direction, new_direction), [(0, 0)])
 
+        origin_cells = self.current_block.cells
+        original_pos = self.current_block.pos
         for offset_x, offset_y in offsets:
-            origin_cells = self.current_block.cells
             # 計算應用偏移後的新格子
             self.current_block.cells = [(x + offset_x, y + offset_y) for x, y in new_cells]
             self.current_block.pos[0] += offset_x
             self.current_block.pos[1] += offset_y
-            if not self.is_valid():
-                self.current_block.cells = origin_cells
-                self.current_block.pos[0] -= offset_x
-                self.current_block.pos[1] -= offset_y
-                return False
-
-        return True  # 檢查所有偏移量後，若都無法有效旋轉，返回 False
+            if self.is_valid():
+                return True
+        self.current_block.cells = origin_cells
+        self.current_block.pos = original_pos
+        return False  # 檢查所有偏移量後，若都無法有效旋轉，返回 False
 
     def is_valid(self):
         for x, y in self.current_block.cells:
@@ -96,10 +96,8 @@ class GameManager:
         self.current_block.pos[1] += 1
         return False
 
-
     def place_block(self):
         self.board.place_block(self.current_block)
         # TODO
         # 放完之後，生成新方塊
         self.current_block = Block(BlockType.L, Direction.initial, 7, 17)
-
