@@ -16,9 +16,9 @@ class Board:
         self.clear_full_lines()
 
     def clear_full_lines(self):
-        for i in range(self.height):
+        i = 0
+        while(i < self.height):
             line = self.board[i]
-            print(i)
             full = True
             for cell in line:
                 if cell == None:
@@ -26,14 +26,14 @@ class Board:
                     break
 
             if not full:
+                i += 1
                 continue
 
             for j in range(len(line)):
                 self.board[i][j] = None
-            print("clear")
+
             for j in range(i + 1, self.height):
                 for k in range(len(self.board[j])):
                     self.board[j - 1][k] = self.board[j][k]
 
-            i -= 1
 
