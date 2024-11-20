@@ -42,6 +42,9 @@ def game_loop():
                     game_manager.rotate_right()
                 elif event.key == K_z:
                     game_manager.rotate_left()
+                elif event.key == K_SPACE:
+                    game_manager.straight_down()
+
 
         # 自動下墜
         if fall_time > fall_speed:
@@ -67,7 +70,7 @@ def game_loop():
                 color = Block.block_color[cell.value]
                 pygame.draw.rect(screen, color, (x * GRID_SIZE, (height - y - 1) * GRID_SIZE, GRID_SIZE, GRID_SIZE))
 
-        
+
         pygame.display.flip()
 
     pygame.quit()

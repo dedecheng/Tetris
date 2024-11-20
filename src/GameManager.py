@@ -3,7 +3,7 @@ import copy
 
 class GameManager:
     def __init__(self, w, h):
-        self.current_block = Block(BlockType.L, Direction.initial, 7, 10)  # 初始方塊
+        self.current_block = Block(BlockType.L, Direction.initial, 7, 17)  # 初始方塊
         self.board = Board(w, h)
         self.w = w
         self.h = h
@@ -101,5 +101,5 @@ class GameManager:
         self.board.place_block(self.current_block)
         # TODO
         # 放完之後，生成新方塊
-        self.current_block = Block(BlockType.L, Direction.initial, 7, 10)
+        self.current_block = Block(BlockType.L, Direction.initial, 7, 17)
 
