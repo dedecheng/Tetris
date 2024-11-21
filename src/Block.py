@@ -48,8 +48,9 @@ class Block:
         (255, 165, 0),
         (255, 255, 0),
         (0, 255, 0),
-        (255, 0, 255),
-        (255, 0, 0)
+        (255, 0, 0),
+        (255, 0, 255)
+
     ]
     def __init__(self, block_type, direction, x, y):
         self.cells = self.initial_cell(block_type)  # 相對於重心的位置
@@ -70,9 +71,9 @@ class Block:
         elif block_type == BlockType.S:
             return [(-1, 0), (0, 0), (0, 1), (1, 1)]  # S 型
         elif block_type == BlockType.Z:
-            return [(-1, 0), (0, 1), (0, 0), (1, 0)]  # Z 型
+            return [(-1, 1), (0, 1), (0, 0), (1, 0)]  # Z 型
         elif block_type == BlockType.T:
-            return [(-1, 1), (0, 1), (0, 0), (1, 0)]  # T 型
+            return [(-1, 0), (0, 1), (0, 0), (1, 0)]  # T 型
         else:
             return []  # 默認情況返回空
 

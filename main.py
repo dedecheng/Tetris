@@ -6,7 +6,7 @@ pygame.init()
 
 # 設定視窗
 GRID_SIZE = 30  # 方塊大小
-width = 4
+width = 10
 height = 20
 WINDOW_WIDTH = width * GRID_SIZE
 WINDOW_HEIGHT = height * GRID_SIZE
