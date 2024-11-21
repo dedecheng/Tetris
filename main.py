@@ -25,16 +25,22 @@ def game_loop():
     fall_time = 0
     fall_speed = 500  # 每 500 毫秒下墜一次
     current_touch_ground_times = 0
+    enable_movement = True
+    move_time = 0
+    move_speed = 300
     while running:
         screen.fill((0, 0, 0))  # 將整個螢幕設置為黑色背景
         delta_time = clock.tick(30)
         fall_time += delta_time
+        move_time += delta_time
 
         # 玩家輸入
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
             if event.type == KEYDOWN:
+                enable_movement = False
+                move_time = 0
                 if event.key == K_LEFT:
                     game_manager.move_left()
                 elif event.key == K_RIGHT:
@@ -47,6 +53,15 @@ def game_loop():
                     game_manager.rotate_left()
                 elif event.key == K_SPACE:
                     game_manager.straight_down()
+        # 偵測持續按鍵
+        keys = pygame.key.get_pressed()
+        if enable_movement:
+            if keys[pygame.K_DOWN]:  # 按下「下」箭頭鍵
+                game_manager.move_down()
+            if keys[pygame.K_LEFT]:  # 按下「左」箭頭鍵
+                game_manager.move_left()
+            if keys[pygame.K_RIGHT]:  # 按下「右」箭頭鍵
+                game_manager.move_right()
 
         # 自動下墜
         if fall_time > fall_speed:
@@ -57,6 +72,10 @@ def game_loop():
                     game_manager.place_block()
                     current_touch_ground_times = 0
             fall_time = 0
+
+        if move_time > move_speed:
+            enable_movement = True
+
 
         # 繪製棋盤
         for i in range(len(game_manager.board.board)):  # 遍歷列的索引
