@@ -70,7 +70,7 @@ class Block:
         elif block_type == BlockType.S:
             return [(-1, 0), (0, 0), (0, 1), (1, 1)]  # S 型
         elif block_type == BlockType.Z:
-            return [(-1, 1), (0, 1), (0, 0), (1, 0)]  # Z 型
+            return [(-1, 0), (0, 1), (0, 0), (1, 0)]  # Z 型
         elif block_type == BlockType.T:
             return [(-1, 1), (0, 1), (0, 0), (1, 0)]  # T 型
         else:

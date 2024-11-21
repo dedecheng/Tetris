@@ -1,13 +1,18 @@
 from src import *
-import copy
+import random
+import queue
+from collections import deque
 
 
 class GameManager:
     def __init__(self, w, h):
-        self.current_block = Block(BlockType.L, Direction.initial, 7, 17)  # 初始方塊
         self.board = Board(w, h)
         self.w = w
         self.h = h
+        self.preview_count = 3
+        self.blocks_queue = deque()
+        self.generate_pos = [int(w / 2), int(h - 2)]
+        self.current_block = self.next_block()  # 初始方塊
 
     def rotate_left(self):
         old_direction = self.current_block.direction
@@ -39,7 +44,7 @@ class GameManager:
 
     def kick_wall(self, new_cells, old_direction, new_direction):
         if self.current_block.type == BlockType.O:
-            pass  # O 型不需要 wall kick
+            return False # O 型不需要 wall kick
         elif self.current_block.type == BlockType.I:
             offsets = Block.WALL_KICKS_I.get((old_direction, new_direction), [(0, 0)])
         else:
@@ -48,7 +53,6 @@ class GameManager:
         origin_cells = self.current_block.cells[:]
         self.current_block.cells = [(x, y) for x, y in new_cells]
         for offset_x, offset_y in offsets:
-            print(offset_x, offset_y)
             # 計算應用偏移後的新格子
             self.current_block.pos[0] += offset_x
             self.current_block.pos[1] += offset_y
@@ -101,4 +105,18 @@ class GameManager:
         self.board.place_block(self.current_block)
         # TODO
         # 放完之後，生成新方塊
-        self.current_block = Block(BlockType.L, Direction.initial, 7, 17)
+        self.current_block = self.next_block()
+
+    def next_block(self):
+        # 方塊類型列表（俄羅斯方塊的 7 種形狀）
+        block_types = list(BlockType)
+        """補充預覽方塊到隊列中"""
+        while len(self.blocks_queue) < self.preview_count:
+            # 生成新的方塊袋並打亂順序
+            new_bag = random.sample(block_types, len(block_types))
+            self.blocks_queue.extend(
+                Block(type, Direction.initial, self.generate_pos[0], self.generate_pos[1]) for type in new_bag)
+
+        """取出下一個方塊"""
+        # 取出下一個方塊
+        return self.blocks_queue.popleft()
