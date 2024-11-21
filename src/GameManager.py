@@ -111,7 +111,7 @@ class GameManager:
         # 方塊類型列表（俄羅斯方塊的 7 種形狀）
         block_types = list(BlockType)
         """補充預覽方塊到隊列中"""
-        while len(self.blocks_queue) < self.preview_count:
+        while len(self.blocks_queue) <= self.preview_count:
             # 生成新的方塊袋並打亂順序
             new_bag = random.sample(block_types, len(block_types))
             self.blocks_queue.extend(

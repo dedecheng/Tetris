@@ -6,10 +6,10 @@ pygame.init()
 
 # 設定視窗
 GRID_SIZE = 30  # 方塊大小
-width = 4
-height = 20
-WINDOW_WIDTH = width * GRID_SIZE
-WINDOW_HEIGHT = height * GRID_SIZE
+WIDTH = 10
+HEIGHT = 20
+WINDOW_WIDTH = (WIDTH + 6) * GRID_SIZE
+WINDOW_HEIGHT = HEIGHT * GRID_SIZE
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris")
 clock = pygame.time.Clock()
@@ -20,7 +20,7 @@ line_color = (50, 50, 50)  # 灰色
 
 def game_loop():
     running = True
-    game_manager = GameManager(width, height)
+    game_manager = GameManager(WIDTH, HEIGHT)
 
     fall_time = 0
     fall_speed = 500  # 每 500 毫秒下墜一次
@@ -83,7 +83,7 @@ def game_loop():
                 if cell:
                     color = Block.block_color[cell.value]
                     pygame.draw.rect(screen, color, (
-                        j * GRID_SIZE, (height - i - 1) * GRID_SIZE,
+                        j * GRID_SIZE, (HEIGHT - i - 1) * GRID_SIZE,
                         GRID_SIZE, GRID_SIZE))
                     # pygame.draw.rect(screen, color, (
                     #     j * GRID_SIZE + bord_width, (height - i - 1) * GRID_SIZE + bord_width,
@@ -97,27 +97,36 @@ def game_loop():
             if cell:
                 color = Block.block_color[cell.value]
                 pygame.draw.rect(screen, color,
-                                 (x * GRID_SIZE, (height - y - 1) * GRID_SIZE,
+                                 (x * GRID_SIZE, (HEIGHT - y - 1) * GRID_SIZE,
                                   GRID_SIZE, GRID_SIZE))
                 # pygame.draw.rect(screen, color,
                 #                  (x * GRID_SIZE + bord_width, (height - y - 1) * GRID_SIZE + bord_width,
                 #                   GRID_SIZE - bord_width * 2, GRID_SIZE - bord_width * 2))
 
+        # 繪製接下來的方塊
+        for preview_num in range(game_manager.preview_count):
+            for x, y in game_manager.blocks_queue[preview_num].cells:
+                cell = game_manager.blocks_queue[preview_num].type
+                if cell:
+                    color = Block.block_color[cell.value]
+                    pygame.draw.rect(screen, color,
+                                     (x * GRID_SIZE + (WIDTH + 2) * GRID_SIZE, ((preview_num + 1) * 3 - y) * GRID_SIZE,
+                                      GRID_SIZE, GRID_SIZE))
         # 繪製棋盤格線
-        for row in range(height + 1):  # 繪製水平線
+        for row in range(HEIGHT + 1):  # 繪製水平線
             pygame.draw.line(
                 screen,
                 line_color,
                 (0, row * GRID_SIZE),
-                (width * GRID_SIZE, row * GRID_SIZE),
+                (WIDTH * GRID_SIZE, row * GRID_SIZE),
                 1  # 線條寬度
             )
-        for col in range(width + 1):  # 繪製垂直線
+        for col in range(WIDTH + 1):  # 繪製垂直線
             pygame.draw.line(
                 screen,
                 line_color,
                 (col * GRID_SIZE, 0),
-                (col * GRID_SIZE, height * GRID_SIZE),
+                (col * GRID_SIZE, HEIGHT * GRID_SIZE),
                 1  # 線條寬度
             )
 
