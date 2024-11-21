@@ -5,11 +5,11 @@ from pygame.locals import *
 pygame.init()
 
 # 設定視窗
-WINDOW_WIDTH = 300
-WINDOW_HEIGHT = 600
 GRID_SIZE = 30  # 方塊大小
-width = 10
+width = 4
 height = 20
+WINDOW_WIDTH = width * GRID_SIZE
+WINDOW_HEIGHT = height * GRID_SIZE
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris")
 clock = pygame.time.Clock()
@@ -75,7 +75,6 @@ def game_loop():
 
         if move_time > move_speed:
             enable_movement = True
-
 
         # 繪製棋盤
         for i in range(len(game_manager.board.board)):  # 遍歷列的索引
