@@ -11,6 +11,8 @@ class GameManager:
         self.h = h
         self.preview_count = 3
         self.blocks_queue = deque()
+        self.hold = None
+        self.is_hold = False
         self.generate_pos = [int(w / 2), int(h - 2)]
         self.current_block = self.next_block()  # 初始方塊
 
@@ -27,6 +29,18 @@ class GameManager:
             self.current_block.direction = new_direction
         else:
             pass
+
+    def hold_block(self):
+        if self.is_hold:
+            return
+        if self.hold == None :
+            self.hold = Block(self.current_block.type, Direction.initial, self.generate_pos[0], self.generate_pos[1])
+            self.current_block = self.next_block()
+        else:
+            new_block = self.hold
+            self.hold = Block(self.current_block.type, Direction.initial, self.generate_pos[0], self.generate_pos[1])
+            self.current_block = new_block
+        self.is_hold = True
 
     def rotate_right(self):
         old_direction = self.current_block.direction
@@ -106,6 +120,9 @@ class GameManager:
         # TODO
         # 放完之後，生成新方塊
         self.current_block = self.next_block()
+
+        # 更新is_hold
+        self.is_hold = False
 
     def next_block(self):
         # 方塊類型列表（俄羅斯方塊的 7 種形狀）

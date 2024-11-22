@@ -6,7 +6,7 @@ class Board:
         self.width = w
         self.height = h
         self.board = [[None] * self.width for _ in range(self.height)]
-        self.hold = BlockType.I
+
 
 
     def place_block(self, block):

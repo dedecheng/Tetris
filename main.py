@@ -1,3 +1,5 @@
+from tkinter.constants import HORIZONTAL
+
 from src import *
 import pygame
 from pygame.locals import *
@@ -8,7 +10,8 @@ pygame.init()
 GRID_SIZE = 30  # 方塊大小
 WIDTH = 10
 HEIGHT = 20
-WINDOW_WIDTH = (WIDTH + 6) * GRID_SIZE
+HORIZONTAL_BLANK = 6
+WINDOW_WIDTH = (WIDTH + HORIZONTAL_BLANK * 2) * GRID_SIZE
 WINDOW_HEIGHT = HEIGHT * GRID_SIZE
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris")
@@ -53,6 +56,8 @@ def game_loop():
                     game_manager.rotate_left()
                 elif event.key == K_SPACE:
                     game_manager.straight_down()
+                elif event.key == K_c:
+                    game_manager.hold_block()
         # 偵測持續按鍵
         keys = pygame.key.get_pressed()
         if enable_movement:
@@ -83,7 +88,7 @@ def game_loop():
                 if cell:
                     color = Block.block_color[cell.value]
                     pygame.draw.rect(screen, color, (
-                        j * GRID_SIZE, (HEIGHT - i - 1) * GRID_SIZE,
+                        (j + HORIZONTAL_BLANK) * GRID_SIZE, (HEIGHT - i - 1) * GRID_SIZE,
                         GRID_SIZE, GRID_SIZE))
                     # pygame.draw.rect(screen, color, (
                     #     j * GRID_SIZE + bord_width, (height - i - 1) * GRID_SIZE + bord_width,
@@ -97,7 +102,7 @@ def game_loop():
             if cell:
                 color = Block.block_color[cell.value]
                 pygame.draw.rect(screen, color,
-                                 (x * GRID_SIZE, (HEIGHT - y - 1) * GRID_SIZE,
+                                 ((x + HORIZONTAL_BLANK) * GRID_SIZE, (HEIGHT - y - 1) * GRID_SIZE,
                                   GRID_SIZE, GRID_SIZE))
                 # pygame.draw.rect(screen, color,
                 #                  (x * GRID_SIZE + bord_width, (height - y - 1) * GRID_SIZE + bord_width,
@@ -110,23 +115,31 @@ def game_loop():
                 if cell:
                     color = Block.block_color[cell.value]
                     pygame.draw.rect(screen, color,
-                                     (x * GRID_SIZE + (WIDTH + 2) * GRID_SIZE, ((preview_num + 1) * 3 - y) * GRID_SIZE,
+                                     ((x + WIDTH + HORIZONTAL_BLANK + 2) * GRID_SIZE, ((preview_num + 1) * 3 - y) * GRID_SIZE,
                                       GRID_SIZE, GRID_SIZE))
+        #繪製 hold 方塊
+        if not game_manager.hold == None:
+            hold_color = Block.block_color[game_manager.hold.type.value]
+            for x, y in game_manager.hold.cells:
+                cell = game_manager.hold.type
+                pygame.draw.rect(screen, hold_color,
+                                 ((x + 2) * GRID_SIZE, (2 - y) * GRID_SIZE,
+                                  GRID_SIZE, GRID_SIZE))
         # 繪製棋盤格線
         for row in range(HEIGHT + 1):  # 繪製水平線
             pygame.draw.line(
                 screen,
                 line_color,
-                (0, row * GRID_SIZE),
-                (WIDTH * GRID_SIZE, row * GRID_SIZE),
+                (HORIZONTAL_BLANK * GRID_SIZE, row * GRID_SIZE),
+                ((WIDTH + HORIZONTAL_BLANK) * GRID_SIZE, row * GRID_SIZE),
                 1  # 線條寬度
             )
         for col in range(WIDTH + 1):  # 繪製垂直線
             pygame.draw.line(
                 screen,
                 line_color,
-                (col * GRID_SIZE, 0),
-                (col * GRID_SIZE, HEIGHT * GRID_SIZE),
+                ((col + HORIZONTAL_BLANK) * GRID_SIZE, 0),
+                ((col + HORIZONTAL_BLANK) * GRID_SIZE, HEIGHT * GRID_SIZE),
                 1  # 線條寬度
             )
 
