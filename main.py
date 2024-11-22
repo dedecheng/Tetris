@@ -19,7 +19,7 @@ clock = pygame.time.Clock()
 bord_width = 2
 max_touch_ground_times = 3
 line_color = (50, 50, 50)  # 灰色
-
+transparency = 75
 
 def game_loop():
     running = True
@@ -108,6 +108,19 @@ def game_loop():
                 #                  (x * GRID_SIZE + bord_width, (height - y - 1) * GRID_SIZE + bord_width,
                 #                   GRID_SIZE - bord_width * 2, GRID_SIZE - bord_width * 2))
 
+        # 繪製落下位置
+        transparency_surface = pygame.Surface((GRID_SIZE, GRID_SIZE), pygame.SRCALPHA)
+        for x, y in game_manager.preview_block.cells:
+            x += game_manager.preview_block.pos[0]
+            y += game_manager.preview_block.pos[1]
+            cell = game_manager.preview_block.type
+            if cell:
+                color = Block.block_color[cell.value]
+                transparency_surface.fill((color[0], color[1], color[2], transparency))
+                screen.blit(transparency_surface, ((x + HORIZONTAL_BLANK) * GRID_SIZE, (HEIGHT - y - 1) * GRID_SIZE))
+                # pygame.draw.rect(screen, color,
+                #                  ((x + HORIZONTAL_BLANK) * GRID_SIZE, (HEIGHT - y - 1) * GRID_SIZE,
+                #                   GRID_SIZE, GRID_SIZE))
         # 繪製接下來的方塊
         for preview_num in range(game_manager.preview_count):
             for x, y in game_manager.blocks_queue[preview_num].cells:
