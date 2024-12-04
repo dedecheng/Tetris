@@ -4,6 +4,7 @@ from Button import Button
 import pygame, sys
 
 pygame.init()
+pygame.mixer.init()
 
 #screen size
 SCREENWIDTH = 720
@@ -16,6 +17,10 @@ BG = pygame.image.load("../assets/Background.png")
 
 TITLE = pygame.image.load("../assets/TETRIS.png")
 TITLE_width, TITLE_height = TITLE.get_size()
+
+#import music
+pygame.mixer.music.load("../assets/BGmusic.mp3")
+pygame.mixer.music.play(-1)
 
 # scale title image
 new_width = TITLE_width * 0.5
