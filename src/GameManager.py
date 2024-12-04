@@ -18,6 +18,7 @@ class GameManager:
         self.generate_pos = [int(w / 2), int(h - 2)]
         self.current_block = self.next_block()  # 初始方塊
         self.preview_block = self.current_block
+        self.line_cleared = 0
 
     def update_preview_block(self):
         self.preview_block = deepcopy(self.current_block)
@@ -136,7 +137,7 @@ class GameManager:
         return False
 
     def place_block(self):
-        self.board.place_block(self.current_block)
+        self.line_cleared += self.board.place_block(self.current_block)
         # TODO
         # 放完之後，生成新方塊
         self.current_block = self.next_block()

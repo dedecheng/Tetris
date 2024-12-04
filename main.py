@@ -21,6 +21,8 @@ max_touch_ground_times = 3
 line_color = (50, 50, 50)  # 灰色
 transparency = 75
 
+font = pygame.font.SysFont('Arial', 20)
+
 def game_loop():
     running = True
     game_manager = GameManager(WIDTH, HEIGHT)
@@ -155,6 +157,10 @@ def game_loop():
                 ((col + HORIZONTAL_BLANK) * GRID_SIZE, HEIGHT * GRID_SIZE),
                 1  # 線條寬度
             )
+
+        #顯示消除行數
+        text_surface = font.render('line clear: ' + str(game_manager.line_cleared), True, (255, 255, 255))
+        screen.blit(text_surface, (WINDOW_WIDTH - 120, 0))
 
         pygame.display.flip()
 
