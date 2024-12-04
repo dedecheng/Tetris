@@ -13,6 +13,9 @@ HEIGHT = 20
 HORIZONTAL_BLANK = 6
 WINDOW_WIDTH = (WIDTH + HORIZONTAL_BLANK * 2) * GRID_SIZE
 WINDOW_HEIGHT = HEIGHT * GRID_SIZE
+INIT_FALL_SPEED = 500 # 每 500 毫秒下墜一次
+LINES_TO_SPEEDUP = 5
+
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris")
 clock = pygame.time.Clock()
@@ -28,7 +31,7 @@ def game_loop():
     game_manager = GameManager(WIDTH, HEIGHT)
 
     fall_time = 0
-    fall_speed = 500  # 每 500 毫秒下墜一次
+    fall_speed = INIT_FALL_SPEED
     current_touch_ground_times = 0
     enable_movement = True
     move_time = 0
@@ -38,6 +41,9 @@ def game_loop():
         delta_time = clock.tick(30)
         fall_time += delta_time
         move_time += delta_time
+
+        #speed up
+        fall_speed = INIT_FALL_SPEED - 50 * int(game_manager.line_cleared / LINES_TO_SPEEDUP)
 
         # 玩家輸入
         for event in pygame.event.get():
