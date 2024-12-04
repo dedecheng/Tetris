@@ -4,7 +4,11 @@ from src import *
 import random
 import queue
 from collections import deque
+from enum import Enum
 
+class GameState(Enum):
+    Playing = 0
+    GameOver = 1
 
 class GameManager:
     def __init__(self, w, h):
@@ -15,10 +19,11 @@ class GameManager:
         self.blocks_queue = deque()
         self.hold = None
         self.is_hold = False
-        self.generate_pos = [int(w / 2), int(h - 2)]
+        self.generate_pos = [int(w / 2), int(h)]
         self.current_block = self.next_block()  # 初始方塊
         self.preview_block = self.current_block
         self.line_cleared = 0
+        self.game_state = GameState.Playing
 
     def update_preview_block(self):
         self.preview_block = deepcopy(self.current_block)
@@ -138,6 +143,10 @@ class GameManager:
 
     def place_block(self):
         self.line_cleared += self.board.place_block(self.current_block)
+
+        # 更新遊戲狀態
+        if self.check_gameover():
+             return
         # TODO
         # 放完之後，生成新方塊
         self.current_block = self.next_block()
@@ -147,6 +156,7 @@ class GameManager:
 
         # 更新is_hold
         self.is_hold = False
+
 
     def next_block(self):
         # 方塊類型列表（俄羅斯方塊的 7 種形狀）
@@ -162,11 +172,22 @@ class GameManager:
         # 取出下一個方塊
         return self.blocks_queue.popleft()
 
+    def check_gameover(self):
+        # check if game is over
+        for cell in self.board.board[self.board.height]:
+            if not cell == None:
+                self.game_state = GameState.GameOver
+                return True
+
+        return False
+
+
+
 def is_valid(block, board):
     for x, y in block.cells:
         x += block.pos[0]
         y += block.pos[1]
-        if x < 0 or x >= board.width or y < 0 or y >= board.height:  # 超出邊界
+        if x < 0 or x >= board.width or y < 0 or y >= board.height + 2:  # 超出邊界(加上頂端方塊生成空間)
             return False
         if board.board[y][x] is not None:  # 與其他方塊重疊
             return False
