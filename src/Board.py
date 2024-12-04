@@ -15,6 +15,7 @@ class Board:
 
         self.clear_full_lines()
 
+
     def clear_full_lines(self):
         i = 0
         while(i < self.height):
@@ -35,5 +36,6 @@ class Board:
             for j in range(i + 1, self.height):
                 for k in range(len(self.board[j])):
                     self.board[j - 1][k] = self.board[j][k]
+
 
 
