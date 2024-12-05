@@ -3,8 +3,6 @@ from turtledemo.nim import SCREENWIDTH
 from Button import Button
 import pygame, sys
 
-from main import bord_width
-
 # initialize
 pygame.init()
 pygame.mixer.init()
@@ -23,6 +21,7 @@ ELLIPSE = pygame.image.load("../assets/BGasset.png")
 # import music
 pygame.mixer.music.load("../assets/BGmusic.mp3")
 pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.2)
 
 # scale image
 new_width = SCREENWIDTH * 0.92
@@ -40,8 +39,6 @@ SMALL_ELLIPSE = pygame.transform.smoothscale(ELLIPSE, (new_width, new_height))
 new_width = QUIT_BUTTON.get_width() * 0.5
 new_height = QUIT_BUTTON.get_height() * 0.5
 SMALL_QUIT = pygame.transform.smoothscale(QUIT_BUTTON, (new_width, new_height))
-
-
 
 # setting font
 def get_font(size): # Returns Press-Start-2P in the desired size
@@ -94,6 +91,8 @@ def main_menu():
         QUIT_BUTTON = Button(250, 100, 100, 50, "QUIT", get_font(30), "#2B6169", "#F9BC60", "#FFFFFF")
 
 
+
+        # not usage
         for button in [PLAY_BUTTON]:
             button.change_color(MENU_MOUSE_POS)
 
