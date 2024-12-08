@@ -1,0 +1,83 @@
+import pygame
+import sys
+
+# 初始化 Pygame
+pygame.init()
+
+# 窗口設定
+WIDTH, HEIGHT = 1440, 1080
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("設定")
+
+# 初始化參數
+volume = 50  # 音量 (默認值)
+speed = 5    # 掉落速度 (默認值)
+block_size = 30  # 方塊大小 (默認值)
+
+def draw_slider(x, y, value, min_value, max_value):
+    """繪製滑桿（僅顯示滑動條）"""
+    pygame.draw.rect(screen, (200, 200, 200), (x, y, 400, 10))  # 滑桿背景
+    slider_x = x + (value - min_value) / (max_value - min_value) * 400
+    pygame.draw.circle(screen, (0, 120, 255), (int(slider_x), y + 5), 8)  # 滑動點
+
+def draw_block_preview(x, y, block_size):
+    """繪製方塊大小預覽"""
+    pygame.draw.rect(screen, (200, 200, 200), (x, y, 150, 150))  # 預覽框
+    pygame.draw.rect(screen, (0, 120, 255), 
+                     (x + 75 - block_size // 2, y + 75 - block_size // 2, block_size, block_size))  # 方塊
+
+def draw_button(label, x, y, w, h):
+    """繪製按鈕"""
+    pygame.draw.rect(screen, (255, 50, 50), (x, y, w, h))  # 按鈕背景
+    font = pygame.font.Font(None, 50)  # 字體大小
+    label_surface = font.render(label, True, (255, 255, 255))
+    screen.blit(label_surface, (x + (w - label_surface.get_width()) // 2, y + (h - label_surface.get_height()) // 2))
+    return pygame.Rect(x, y, w, h)
+
+def main():
+    global volume, speed, block_size
+    clock = pygame.time.Clock()
+    back_button_rect = None
+
+    while True:
+        screen.fill((255, 255, 255))  # 背景設為白色
+
+        # 事件處理
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = event.pos
+                # 點擊 "返回" 按鈕
+                if back_button_rect and back_button_rect.collidepoint(x, y):
+                    print("返回上一頁")
+                    return
+            if event.type == pygame.MOUSEMOTION and pygame.mouse.get_pressed()[0]:
+                x, y = event.pos
+                # 調整音量滑桿
+                if 200 <= y <= 210 and 520 <= x <= 920:
+                    volume = int((x - 520) / 400 * 100)
+                    volume = max(0, min(100, volume))
+                # 調整速度滑桿
+                if 400 <= y <= 410 and 520 <= x <= 920:
+                    speed = int((x - 520) / 400 * 10)
+                    speed = max(1, min(10, speed))
+                # 調整方塊大小滑桿
+                if 600 <= y <= 610 and 520 <= x <= 920:
+                    block_size = int((x - 520) / 400 * 40 + 10)
+                    block_size = max(10, min(50, block_size))
+
+        # 繪製界面
+        draw_slider(520, 200, volume, 0, 100)  # 音量滑桿
+        draw_slider(520, 400, speed, 1, 10)   # 掉落速度滑桿
+        draw_slider(520, 600, block_size, 10, 50)  # 方塊大小滑桿
+        draw_block_preview(1000, 500, block_size)  # 方塊大小預覽
+        back_button_rect = draw_button("返回", 50, 950, 150, 70)  # 返回按鈕
+
+        # 更新畫面
+        pygame.display.flip()
+        clock.tick(60)
+
+if __name__ == "__main__":
+    main()
