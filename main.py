@@ -178,6 +178,10 @@ def game_loop():
         text_surface = font.render('line clear: ' + str(game_manager.line_cleared), True, (255, 255, 255))
         screen.blit(text_surface, (WINDOW_WIDTH - 120, 0))
 
+        #顯示分數
+        font = pygame.font.SysFont('Arial', 20)
+        text_surface = font.render('score: ' + str(game_manager.score), True, (255, 255, 255))
+        screen.blit(text_surface, (WINDOW_WIDTH - 120, 30))
         pygame.display.flip()
 
     pygame.quit()
