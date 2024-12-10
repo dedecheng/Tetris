@@ -5,7 +5,7 @@ import pygame
 from pygame.locals import *
 
 from src.GameManager import GameState
-
+import math
 pygame.init()
 
 # 設定視窗
@@ -28,7 +28,6 @@ line_color = (50, 50, 50)  # 灰色
 transparency = 75
 
 
-
 def game_loop():
     running = True
     game_manager = GameManager(WIDTH, HEIGHT)
@@ -47,8 +46,9 @@ def game_loop():
         move_time += delta_time
         elapsed_time += delta_time
 
-        # speed up
-        fall_speed = max(INIT_FALL_SPEED - 50 * int(game_manager.line_cleared / LINES_TO_SPEEDUP), 0)
+        # speed up and update game_level
+        game_manager.game_level = min(elapsed_time // 30000 + 1, 10)
+        fall_speed = max(int(INIT_FALL_SPEED - 50 * game_manager.game_level), 10)
 
         # 玩家輸入
         for event in pygame.event.get():
@@ -193,6 +193,11 @@ def game_loop():
         font = pygame.font.SysFont('Arial', 20)
         text_surface = font.render('time: ' + f"{elapsed_time / 1000} seconds", True, (255, 255, 255))
         screen.blit(text_surface, (WINDOW_WIDTH - 120, 60))
+
+        # 顯示level
+        font = pygame.font.SysFont('Arial', 20)
+        text_surface = font.render('level: ' + f"{game_manager.game_level}", True, (255, 255, 255))
+        screen.blit(text_surface, (WINDOW_WIDTH - 120, 90))
         pygame.display.flip()
 
     pygame.quit()

@@ -30,6 +30,7 @@ class GameManager:
         self.score = 0
         self.game_state = GameState.Playing
         self.player_name = "ray"
+        self.game_level = 1
 
     def update_preview_block(self):
         self.preview_block = deepcopy(self.current_block)
