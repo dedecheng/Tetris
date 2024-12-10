@@ -16,7 +16,7 @@ HORIZONTAL_BLANK = 6
 VERTICAL_BLANK = 2
 WINDOW_WIDTH = (WIDTH + HORIZONTAL_BLANK * 2) * GRID_SIZE
 WINDOW_HEIGHT = (HEIGHT + VERTICAL_BLANK) * GRID_SIZE
-INIT_FALL_SPEED = 500 # 每 500 毫秒下墜一次
+INIT_FALL_SPEED = 500  # 每 500 毫秒下墜一次
 LINES_TO_SPEEDUP = 5
 
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -28,6 +28,7 @@ line_color = (50, 50, 50)  # 灰色
 transparency = 75
 
 
+
 def game_loop():
     running = True
     game_manager = GameManager(WIDTH, HEIGHT)
@@ -37,14 +38,16 @@ def game_loop():
     current_touch_ground_times = 0
     enable_movement = True
     move_time = 0
-    move_speed = 300
+    move_speed = 150
+    elapsed_time = 0
     while running:
         screen.fill((0, 0, 0))  # 將整個螢幕設置為黑色背景
-        delta_time = clock.tick(30)
+        delta_time = clock.tick(40)
         fall_time += delta_time
         move_time += delta_time
+        elapsed_time += delta_time
 
-        #speed up
+        # speed up
         fall_speed = max(INIT_FALL_SPEED - 50 * int(game_manager.line_cleared / LINES_TO_SPEEDUP), 0)
 
         # 玩家輸入
@@ -60,6 +63,7 @@ def game_loop():
                     game_manager.move_right()
                 elif event.key == K_DOWN:
                     game_manager.move_down()
+                    fall_time = 0
                 elif event.key == K_UP:
                     game_manager.rotate_right()
                 elif event.key == K_z:
@@ -90,8 +94,8 @@ def game_loop():
                         current_touch_ground_times = 0
                 fall_time = 0
 
-        if move_time > move_speed:
-            enable_movement = True
+            if move_time > move_speed:
+                enable_movement = True
 
         # 繪製棋盤
         for i in range(len(game_manager.board.board)):  # 遍歷列的索引
@@ -129,7 +133,8 @@ def game_loop():
             if cell:
                 color = Block.block_color[cell.value]
                 transparency_surface.fill((color[0], color[1], color[2], transparency))
-                screen.blit(transparency_surface, ((x + HORIZONTAL_BLANK) * GRID_SIZE, (HEIGHT - y - 1 + VERTICAL_BLANK) * GRID_SIZE))
+                screen.blit(transparency_surface,
+                            ((x + HORIZONTAL_BLANK) * GRID_SIZE, (HEIGHT - y - 1 + VERTICAL_BLANK) * GRID_SIZE))
                 # pygame.draw.rect(screen, color,
                 #                  ((x + HORIZONTAL_BLANK) * GRID_SIZE, (HEIGHT - y - 1) * GRID_SIZE,
                 #                   GRID_SIZE, GRID_SIZE))
@@ -140,9 +145,10 @@ def game_loop():
                 if cell:
                     color = Block.block_color[cell.value]
                     pygame.draw.rect(screen, color,
-                                     ((x + WIDTH + HORIZONTAL_BLANK + 2) * GRID_SIZE, ((preview_num + 1) * 3 - y + VERTICAL_BLANK) * GRID_SIZE,
+                                     ((x + WIDTH + HORIZONTAL_BLANK + 2) * GRID_SIZE,
+                                      ((preview_num + 1) * 3 - y + VERTICAL_BLANK) * GRID_SIZE,
                                       GRID_SIZE, GRID_SIZE))
-        #繪製 hold 方塊
+        # 繪製 hold 方塊
         if not game_manager.hold == None:
             hold_color = Block.block_color[game_manager.hold.type.value]
             for x, y in game_manager.hold.cells:
@@ -173,15 +179,20 @@ def game_loop():
             text_rect = text_surface.get_rect(center=(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
             screen.blit(text_surface, text_rect)
 
-        #顯示消除行數
+        # 顯示消除行數
         font = pygame.font.SysFont('Arial', 20)
         text_surface = font.render('line clear: ' + str(game_manager.line_cleared), True, (255, 255, 255))
         screen.blit(text_surface, (WINDOW_WIDTH - 120, 0))
 
-        #顯示分數
+        # 顯示分數
         font = pygame.font.SysFont('Arial', 20)
         text_surface = font.render('score: ' + str(game_manager.score), True, (255, 255, 255))
         screen.blit(text_surface, (WINDOW_WIDTH - 120, 30))
+
+        # 顯示時間
+        font = pygame.font.SysFont('Arial', 20)
+        text_surface = font.render('time: ' + f"{elapsed_time / 1000} seconds", True, (255, 255, 255))
+        screen.blit(text_surface, (WINDOW_WIDTH - 120, 60))
         pygame.display.flip()
 
     pygame.quit()

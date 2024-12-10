@@ -29,7 +29,7 @@ class GameManager:
         self.line_cleared = 0
         self.score = 0
         self.game_state = GameState.Playing
-        self.player_name = "dede"
+        self.player_name = "ray"
 
     def update_preview_block(self):
         self.preview_block = deepcopy(self.current_block)
