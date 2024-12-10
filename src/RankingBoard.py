@@ -24,7 +24,7 @@ class RankingBoard:
         except json.JSONDecodeError:
             # 如果 JSON 格式錯誤，返回空列表
             return []
-    
+
     def save_rankings(self, player_name, player_score):
         # 新增玩家數據
         new_entry = {"name": player_name, "score": player_score, "line": self.line_cleared} # 注意score和line是int
@@ -56,7 +56,7 @@ class RankingBoard:
         self.screen.blit(back_button_resized, back_button_rect)
 
         # 繪製排行榜數據
-        for idx, entry in enumerate(self.rankings):
+        for idx, entry in 8:
             row_font = pygame.font.Font(None, 30)
             name = entry["name"]
             line = entry["line"]
@@ -79,6 +79,7 @@ class RankingBoard:
             if self.back_button_rect.collidepoint(event.pos):
                 return "back"  # 返回首頁
         return None
+
 
 
 
@@ -106,5 +107,4 @@ if __name__ == "__main__":
         clock.tick(60)
 
     pygame.quit()
-    """
-    
+"""
