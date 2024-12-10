@@ -31,6 +31,7 @@ class GameManager:
         self.game_state = GameState.Playing
         self.player_name = "ray"
         self.game_level = 1
+        self.last_move_rotate = False
 
     def update_preview_block(self):
         self.preview_block = deepcopy(self.current_block)
@@ -50,8 +51,10 @@ class GameManager:
         if self.kick_wall(new_cells, old_direction, new_direction):
             # 成功更新方向
             self.current_block.direction = new_direction
+            self.last_move_rotate = True
         else:
             pass
+
         self.update_preview_block()
 
     def hold_block(self):
@@ -78,6 +81,8 @@ class GameManager:
         if self.kick_wall(new_cells, old_direction, new_direction):
             # 成功更新方向
             self.current_block.direction = new_direction
+            self.last_move_rotate = True
+
         else:
             pass
         self.update_preview_block()
@@ -118,6 +123,9 @@ class GameManager:
         self.current_block.pos[0] += 1
         if not is_valid(self.current_block, self.board):
             self.current_block.pos[0] -= 1
+        else:
+            self.last_move_rotate = False
+
         self.update_preview_block()
 
 
@@ -125,6 +133,8 @@ class GameManager:
         self.current_block.pos[0] -= 1
         if not is_valid(self.current_block, self.board):
             self.current_block.pos[0] += 1
+        else:
+            self.last_move_rotate = False
         self.update_preview_block()
 
 
@@ -132,6 +142,8 @@ class GameManager:
         self.current_block.pos[1] -= 1
         if not is_valid(self.current_block, self.board):
             self.current_block.pos[1] += 1
+        else:
+            self.last_move_rotate = False
         self.update_preview_block()
 
 
@@ -192,16 +204,69 @@ class GameManager:
         return False
 
     def score_update(self, lines):
-        if lines == 0:
-            return
-        elif lines == 1:
-            self.score += 100
-        elif lines == 2:
-            self.score += 300
-        elif lines == 3:
-            self.score += 500
-        elif lines == 4:
-            self.score += 800
+        block_corner = 0
+        if self.current_block.type == BlockType.T and self.last_move_rotate:
+            x, y = self.current_block.pos
+            if x == 0:
+                if y == 0 or y == self.h - 1:
+                    block_corner = 0
+                else:
+                    block_corner += 2
+                    if self.board.board[y - 1][x + 1] == None:
+                        block_corner += 1
+                    if self.board.board[y + 1][x + 1] == None:
+                        block_corner += 1
+            elif x == self.w - 1:
+                if y == 0 or y == self.h - 1:
+                    block_corner = 0
+                else:
+                    block_corner += 2
+                    if self.board.board[y - 1][x - 1] == None:
+                        block_corner += 1
+                    if self.board.board[y + 1][x - 1] == None:
+                        block_corner += 1
+            elif y == 0:
+                block_corner += 2
+                if self.board.board[y + 1][x - 1] == None:
+                    block_corner += 1
+                if self.board.board[y + 1][x + 1] == None:
+                    block_corner += 1
+            elif y == self.h - 1:
+                block_corner += 2
+                if self.board.board[y - 1][x - 1] == None:
+                    block_corner += 1
+                if self.board.board[y - 1][x + 1] == None:
+                    block_corner += 1
+            else :
+                if self.board.board[y + 1][x - 1] == None:
+                    block_corner += 1
+                if self.board.board[y + 1][x + 1] == None:
+                    block_corner += 1
+                if self.board.board[y - 1][x - 1] == None:
+                    block_corner += 1
+                if self.board.board[y - 1][x + 1] == None:
+                    block_corner += 1
+
+        if block_corner >= 3:
+            if lines == 0:
+                self.score += 100
+            elif lines == 1:
+                self.score += 500
+            elif lines == 2:
+                self.score += 800
+            elif lines == 3:
+                self.score += 1200
+        else:
+            if lines == 0:
+                return
+            elif lines == 1:
+                self.score += 100
+            elif lines == 2:
+                self.score += 300
+            elif lines == 3:
+                self.score += 500
+            elif lines == 4:
+                self.score += 800
     def record_score(self):
 
         file_path = "./assets/ranking_board.json"
