@@ -9,6 +9,7 @@ from collections import deque
 from enum import Enum
 import json
 import os
+from pathlib import Path
 
 class GameState(Enum):
     Playing = 0
@@ -17,6 +18,8 @@ class GameState(Enum):
 
 class GameManager:
     def __init__(self, w, h):
+        self.root_dir = Path(__file__).parent.parent
+        self.json_file_path = str(self.root_dir / "assets/ranking_board.json")
         self.board = Board(w, h)
         self.w = w
         self.h = h
@@ -270,7 +273,7 @@ class GameManager:
                 self.score += 800
     def record_score(self):
 
-        file_path = "./assets/ranking_board.json"
+        file_path = self.json_file_path
         if os.path.exists(file_path):
             with open(file_path, "r", encoding="utf-8") as file:
                 data = json.load(file)
