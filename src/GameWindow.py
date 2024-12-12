@@ -6,6 +6,7 @@ import pygame
 from pygame.locals import *
 
 from src.GameManager import GameState
+import src.global_var as global_var
 import math
 from pathlib import Path
 
@@ -13,12 +14,12 @@ pygame.init()
 
 # 設定視窗
 GRID_SIZE = 30  # 方塊大小
-WIDTH = 10
+WIDTH = global_var.WIDTH
 HEIGHT = 20
 HORIZONTAL_BLANK = 2
 VERTICAL_BLANK = 1
 BOTTON_MARGIN = 1.5
-WINDOW_WIDTH = WINDOW_WIDTH = (WIDTH + HORIZONTAL_BLANK * 2 + 10) * GRID_SIZE
+WINDOW_WIDTH = (WIDTH + HORIZONTAL_BLANK * 2 + 10) * GRID_SIZE
 WINDOW_HEIGHT = (HEIGHT + VERTICAL_BLANK + BOTTON_MARGIN) * GRID_SIZE
 PREVIEW_OFFSET = WIDTH + 19
 PREVIEW_WIDTH = 5  # 預覽區域的寬度（以格子為單位）
