@@ -15,6 +15,7 @@ class Board:
 
         return  self.clear_full_lines()
 
+
     def clear_full_lines(self):
         line_cleared = 0
         i = 0
@@ -44,3 +45,4 @@ class Board:
             line_cleared += 1
 
         return line_cleared
+
