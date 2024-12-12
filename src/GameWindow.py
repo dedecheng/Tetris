@@ -7,6 +7,8 @@ from pygame.locals import *
 
 from src.GameManager import GameState
 import math
+from pathlib import Path
+
 pygame.init()
 
 # 設定視窗
@@ -22,9 +24,10 @@ PREVIEW_OFFSET = WIDTH + 19
 PREVIEW_WIDTH = 5  # 預覽區域的寬度（以格子為單位）
 PREVIEW_HEIGHT = 13  # 預覽區域的高度（以格子為單位）
 PREVIEW_GRID_SIZE = GRID_SIZE // 2  # 預覽區域內方塊縮小一半
-INIT_FALL_SPEED = 500 # 每 500 毫秒下墜一次
+INIT_FALL_SPEED = 500  # 每 500 毫秒下墜一次
 LINES_TO_SPEEDUP = 5
 
+root_dir = Path(__file__).parent.parent
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris")
 clock = pygame.time.Clock()
@@ -33,8 +36,9 @@ max_touch_ground_times = 3
 line_color = (255, 255, 255)  # 灰色
 transparency = 75
 is_paused = False
-background_image = pygame.image.load("Group 6.png")
+background_image = pygame.image.load(str(root_dir) + r'.\assets\Group 6.png')
 background_image = pygame.transform.scale(background_image, (WINDOW_WIDTH, WINDOW_HEIGHT))
+
 
 def draw_pause_button():
     """繪製暫停按鈕"""
@@ -43,8 +47,10 @@ def draw_pause_button():
     pygame.draw.rect(screen, (171, 209, 198), (WINDOW_WIDTH - 43, 15, 8, 20))  # 左豎線
     pygame.draw.rect(screen, (171, 209, 198), (WINDOW_WIDTH - 28, 15, 8, 20))  # 右豎線
     return PAUSE_BUTTON_RECT
-    
+
+
 def game_loop():
+    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     global is_paused
     running = True
     game_manager = GameManager(WIDTH, HEIGHT)
@@ -58,39 +64,40 @@ def game_loop():
     elapsed_time = 0
     while running:
         screen.fill((171, 209, 198))  # screem color
-        
+
         screen.blit(background_image, (60, -30))
-        
+
         pygame.draw.rect(
             screen,
             (255, 255, 255),  # 邊框顏色：白色
             (
                 HORIZONTAL_BLANK * GRID_SIZE - 12,  # 左上角 X（稍微往左移）
-                VERTICAL_BLANK * GRID_SIZE - 12,   # 左上角 Y（稍微往上移）
-                WIDTH * GRID_SIZE + 25,            # 寬度（稍微增寬）
-                HEIGHT * GRID_SIZE + 25            # 高度（稍微增高）
+                VERTICAL_BLANK * GRID_SIZE - 12,  # 左上角 Y（稍微往上移）
+                WIDTH * GRID_SIZE + 25,  # 寬度（稍微增寬）
+                HEIGHT * GRID_SIZE + 25  # 高度（稍微增高）
             ),
             40,  # 邊框厚度
             border_radius=5
         )
-        
+
         pygame.draw.rect(
             screen,
             (249, 188, 96),  # board color
             (
-            HORIZONTAL_BLANK * GRID_SIZE,  # 棋盤左上角 X 坐標
-            VERTICAL_BLANK * GRID_SIZE,   # 棋盤左上角 Y 坐標
-            WIDTH * GRID_SIZE,            # 棋盤寬度
-            HEIGHT * GRID_SIZE            # 棋盤高度
+                HORIZONTAL_BLANK * GRID_SIZE,  # 棋盤左上角 X 坐標
+                VERTICAL_BLANK * GRID_SIZE,  # 棋盤左上角 Y 坐標
+                WIDTH * GRID_SIZE,  # 棋盤寬度
+                HEIGHT * GRID_SIZE  # 棋盤高度
             )
         )
-        
+
         PAUSE_BUTTON_RECT = draw_pause_button()
-        
+
         delta_time = clock.tick(30)
-        fall_time += delta_time
-        move_time += delta_time
-        elapsed_time += delta_time
+        if not is_paused:
+            fall_time += delta_time
+            move_time += delta_time
+            elapsed_time += delta_time
 
         # speed up and update game_level
         game_manager.game_level = min(elapsed_time // 30000 + 1, 10)
@@ -121,7 +128,7 @@ def game_loop():
                     game_manager.straight_down()
                 elif event.key == K_c:
                     game_manager.hold_block()
-                    
+
         if not is_paused:
             if game_manager.game_state == GameState.Playing:
                 # 偵測持續按鍵
@@ -133,8 +140,8 @@ def game_loop():
                         game_manager.move_left()
                     if keys[pygame.K_RIGHT]:  # 按下「右」箭頭鍵
                         game_manager.move_right()
-                        
-            # 自動下墜
+
+                # 自動下墜
                 if fall_time > fall_speed:
                     game_manager.move_down()
                     if game_manager.ground_touched():
@@ -155,8 +162,6 @@ def game_loop():
                 if keys[pygame.K_RIGHT]:  # 按下「右」箭頭鍵
                     game_manager.move_right()
 
-
-
             if move_time > move_speed:
                 enable_movement = True
 
@@ -165,7 +170,7 @@ def game_loop():
             pause_text = font.render('Paused', True, (255, 255, 255))
             pause_rect = pause_text.get_rect(center=(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
             screen.blit(pause_text, pause_rect)
-            
+
         # 繪製棋盤
         for i in range(len(game_manager.board.board)):  # 遍歷棋盤
             for j in range(len(game_manager.board.board[i])):
@@ -179,7 +184,7 @@ def game_loop():
                             (j + HORIZONTAL_BLANK) * GRID_SIZE,  # X 坐標
                             (HEIGHT - i - 1 + VERTICAL_BLANK) * GRID_SIZE,  # Y 坐標
                             GRID_SIZE,  # 矩形寬度
-                            GRID_SIZE   # 矩形高度
+                            GRID_SIZE  # 矩形高度
                         ),
                         border_radius=5  # 圓角半徑
                     )
@@ -187,7 +192,7 @@ def game_loop():
                     #     j * GRID_SIZE + bord_width, (height - i - 1) * GRID_SIZE + bord_width,
                     #     GRID_SIZE - bord_width * 2, GRID_SIZE - bord_width * 2))
 
-        # 繪製方塊  
+        # 繪製方塊
         for x, y in game_manager.current_block.cells:
             x += game_manager.current_block.pos[0]
             y += game_manager.current_block.pos[1]
@@ -203,8 +208,8 @@ def game_loop():
                         GRID_SIZE,
                         GRID_SIZE
                     ),
-                    border_radius = 5
-        )
+                    border_radius=5
+                )
 
                 # pygame.draw.rect(screen, color,
                 #                  (x * GRID_SIZE + bord_width, (height - y - 1) * GRID_SIZE + bord_width,
@@ -224,32 +229,31 @@ def game_loop():
                 # pygame.draw.rect(screen, color,
                 #                  ((x + HORIZONTAL_BLANK) * GRID_SIZE, (HEIGHT - y - 1) * GRID_SIZE,
                 #                   GRID_SIZE, GRID_SIZE))
-        
+
         pygame.draw.rect(
             screen,
             (255, 255, 255),  # 白色邊框顏色
             (
-                16 * 25 - 5,            # 邊框左上角 X（稍微向左偏移）
+                16 * 25 - 5,  # 邊框左上角 X（稍微向左偏移）
                 VERTICAL_BLANK * GRID_SIZE - 5,  # 邊框左上角 Y（稍微向上偏移）
                 PREVIEW_WIDTH * PREVIEW_GRID_SIZE + 10,  # 寬度（稍微增寬）
                 PREVIEW_HEIGHT * PREVIEW_GRID_SIZE + 10  # 高度（稍微增高）
             ),
             5,  # 邊框厚度
-            border_radius = 5
+            border_radius=5
         )
-        
+
         pygame.draw.rect(
             screen,
             (249, 188, 96),  # 黑色背景
             (
-                16 * 25,             # 預覽框左上角 X
-                VERTICAL_BLANK * GRID_SIZE,             # 預覽框左上角 Y
-                PREVIEW_WIDTH * PREVIEW_GRID_SIZE,      # 預覽框寬度
-                PREVIEW_HEIGHT * PREVIEW_GRID_SIZE      # 預覽框高度
+                16 * 25,  # 預覽框左上角 X
+                VERTICAL_BLANK * GRID_SIZE,  # 預覽框左上角 Y
+                PREVIEW_WIDTH * PREVIEW_GRID_SIZE,  # 預覽框寬度
+                PREVIEW_HEIGHT * PREVIEW_GRID_SIZE  # 預覽框高度
             )
         )
 
-        
         # 繪製接下來的方塊
         for preview_num in range(game_manager.preview_count):
             for x, y in game_manager.blocks_queue[preview_num].cells:
@@ -265,11 +269,10 @@ def game_loop():
                             PREVIEW_GRID_SIZE,
                             PREVIEW_GRID_SIZE
                         ),
-                        border_radius = 2  # 減小圓角半徑，因為預覽區塊較小
+                        border_radius=2  # 減小圓角半徑，因為預覽區塊較小
                     )
 
-
-        #繪製 hold 方塊
+        # 繪製 hold 方塊
         if not game_manager.hold == None:
             hold_color = Block.block_color[game_manager.hold.type.value]
             for x, y in game_manager.hold.cells:
@@ -327,9 +330,8 @@ def game_loop():
         font = pygame.font.SysFont('Arial', 20)
         text_surface = font.render('level: ' + f"{game_manager.game_level}", True, (255, 255, 255))
         screen.blit(text_surface, (WINDOW_WIDTH - 120, 90))
-        pygame.display.flip()
+        pygame.display.update()
 
     pygame.quit()
 
 
-game_loop()

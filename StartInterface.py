@@ -1,5 +1,7 @@
-from Button import Button, RectButton, CircleButton
+from src.Button import Button, RectButton, CircleButton
 import pygame, sys
+from src.GameWindow import game_loop
+from src.RankingBoard import RankingBoard
 
 # initialize
 pygame.init()
@@ -11,14 +13,14 @@ SCREENHEIGHT = 540
 SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
 
 # import images
-BG = pygame.image.load("../assets/BG.png")
-TITLE = pygame.image.load("../assets/TETRIS.png")
-QUIT_BUTTON = pygame.image.load("../assets/QuitButton.png")
-BGassets = pygame.image.load("../assets/BGasset.png")
-MOUSE_IMAGE = pygame.image.load("../assets/mouse.png")
+BG = pygame.image.load("assets/BG.png")
+TITLE = pygame.image.load("assets/TETRIS.png")
+QUIT_BUTTON = pygame.image.load("assets/QuitButton.png")
+BGassets = pygame.image.load("assets/BGasset.png")
+MOUSE_IMAGE = pygame.image.load("assets/mouse.png")
 
 # import music
-pygame.mixer.music.load("../assets/BGmusic.mp3")
+pygame.mixer.music.load("assets/BGmusic.mp3")
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.2)
 
@@ -39,20 +41,23 @@ new_width = QUIT_BUTTON.get_width() * 0.5
 new_height = QUIT_BUTTON.get_height() * 0.5
 SMALL_QUIT = pygame.transform.smoothscale(QUIT_BUTTON, (new_width, new_height))
 
+ranking_board = RankingBoard()
 # setting font
 def get_font(size):  # Returns Press-Start-2P in the desired size
     return pygame.font.Font(pygame.font.match_font('arialblack'), size)
 
 def play():
-    while True:
-        SCREEN.fill("#2B6169")
-        pygame.display.update()
+    game_loop()
+    # while True:
+    #     SCREEN.fill("#2B6169")
+    #     pygame.display.update()
 
 def options():
     while True:
         pygame.display.update()
 
 def main_menu():
+    SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
     # Create buttons
     START_BTN = RectButton(150, 280, 150, 90, "START", get_font(25), "#2B6169", "#E16162", "#FFFFFF")
     QUIT_BTN = CircleButton(SCREENWIDTH * 0.87, SCREENHEIGHT - SMALL_QUIT.get_height() * 1.5, 50, "QUIT", get_font(30),
@@ -102,10 +107,14 @@ def main_menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if START_BTN.is_clicked(event):
                     play()
+                if RANK_BTN.is_clicked(event):
+                    ranking_board.render()
+                    SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
                 if QUIT_BTN.is_clicked(event):
                     pygame.quit()
                     sys.exit()
 
         pygame.display.update()
 
-main_menu()
+if __name__ == "__main__":
+    main_menu()
