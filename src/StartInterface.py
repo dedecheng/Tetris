@@ -15,14 +15,14 @@ SCREENHEIGHT = 540
 SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
 
 # import images
-BG = pygame.image.load("../assets/BG.png")
-TITLE = pygame.image.load("../assets/TETRIS.png")
-QUIT_BUTTON = pygame.image.load("../assets/QuitButton.png")
-BGassets = pygame.image.load("../assets/BGasset.png")
-MOUSE_IMAGE = pygame.image.load("../assets/mouse.png")
+BG = pygame.image.load("../assets/pictures/BG.png")
+TITLE = pygame.image.load("../assets/pictures/TETRIS.png")
+QUIT_BUTTON = pygame.image.load("../assets/pictures/QuitButton.png")
+BGassets = pygame.image.load("../assets/pictures/BGasset.png")
+MOUSE_IMAGE = pygame.image.load("../assets/pictures/mouse.png")
 
 # import music
-pygame.mixer.music.load("../assets/BGmusic.mp3")
+pygame.mixer.music.load("../assets/music/BGmusic.mp3")
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.2)
 
