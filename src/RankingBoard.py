@@ -5,12 +5,12 @@ class RankingBoard:
     def __init__(self, screen):
         self.screen = screen
         self.font = pygame.font.SysFont("Calibri Light", 24)
-        self.ranking_file = "assets/RankingBoard.json"  # 文件名更新為 RankingBoard.json
+        self.ranking_file = "../assets/RankingBoard.json"  # 文件名更新為 RankingBoard.json
         self.rankings = self.load_rankings()
 
         # 加載背景與按鈕
-        self.bg_image = pygame.image.load("assets/ranking_bg.png")  # 排行榜背景
-        self.back_button_image = pygame.image.load("assets/back_button.png")  # 返回按鈕圖片
+        self.bg_image = pygame.image.load("../assets/ranking_bg.png")  # 排行榜背景
+        self.back_button_image = pygame.image.load("../assets/back_button.png")  # 返回按鈕圖片
         self.back_button_rect = self.back_button_image.get_rect(topleft=(50, 50))
 
     def load_rankings(self):
@@ -56,7 +56,7 @@ class RankingBoard:
         self.screen.blit(back_button_resized, back_button_rect)
 
         # 繪製排行榜數據
-        for idx, entry in 8:
+        for idx, entry in enumerate(self.rankings):
             row_font = pygame.font.Font(None, 30)
             name = entry["name"]
             line = entry["line"]
@@ -83,7 +83,7 @@ class RankingBoard:
 
 
 
-"""
+
 #測試用
 if __name__ == "__main__":
     pygame.init()
@@ -107,4 +107,3 @@ if __name__ == "__main__":
         clock.tick(60)
 
     pygame.quit()
-"""
