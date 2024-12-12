@@ -86,6 +86,7 @@ def main_menu():
 
         MENU_MOUSE_POS = pygame.mouse.get_pos()
         MENU_MOUSE_RECT = (MENU_MOUSE_POS[0] - 0.8 *MOUSE_IMAGE.get_width(), MENU_MOUSE_POS[1] - 0.75*MOUSE_IMAGE.get_height())
+        pygame.mixer.music.set_volume(global_var.VOLUME)
 
         # Place images: title, ellipse, quit
         image_width, image_height = SMALL_TITLE.get_size()

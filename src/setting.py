@@ -12,15 +12,14 @@ screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
 pygame.display.set_caption("設定")
 font_size = 50
 font = get_font(font_size)
-MAX_VOLUME = 2
+MAX_VOLUME = 1
 MIN_VOLUME = 0
 MAX_SPEED = 10
 MIN_SPEED = 1
 MAX_WIDTH = 10
 MIN_WIDTH = 4
 def setting_page():
-    # 初始化參數
-    volume = 1
+
 
     running = True
     while running:
@@ -41,7 +40,7 @@ def setting_page():
                            SCREENWIDTH / 40)
         pygame.draw.rect(screen, (43, 97, 105), rect, border_radius=100)
         rect = pygame.Rect(17 * SCREENWIDTH / 40, 3 * SCREENHEIGHT / 20 + SCREENWIDTH / 80,
-                           16 * SCREENWIDTH / 40 * ((volume - MIN_VOLUME) / (MAX_VOLUME - MIN_VOLUME)), SCREENWIDTH / 40)
+                           16 * SCREENWIDTH / 40 * ((global_var.VOLUME - MIN_VOLUME) / (MAX_VOLUME - MIN_VOLUME)), SCREENWIDTH / 40)
         pygame.draw.rect(screen, (225, 97, 98), rect, border_radius=100)
 
         #speed
@@ -95,17 +94,17 @@ def setting_page():
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if sound_plus_button.is_clicked(event):
-                    new_value = volume + (MAX_VOLUME - MIN_VOLUME) / 9
-                    volume = min(new_value, MAX_VOLUME)
+                    new_value = global_var.VOLUME + (MAX_VOLUME - MIN_VOLUME) / 9
+                    global_var.VOLUME = min(new_value, MAX_VOLUME)
                 if sound_minus_button.is_clicked(event):
-                    new_value = volume - (MAX_VOLUME - MIN_VOLUME) / 9
-                    volume = max(new_value, MIN_VOLUME)
+                    new_value = global_var.VOLUME - (MAX_VOLUME - MIN_VOLUME) / 9
+                    global_var.VOLUME = max(new_value, MIN_VOLUME)
                 if speed_plus_button.is_clicked(event):
-                    new_value = global_var.SPEED + (MAX_SPEED - MIN_SPEED) / 9
+                    new_value = global_var.SPEED + 1
                     global_var.SPEED = min(new_value, MAX_SPEED)
                 if speed_minus_button.is_clicked(event):
-                    new_value = global_var.SPEED - (MAX_SPEED - MIN_SPEED) / 9
-                    global_var.SPEED = max(new_value, MIN_VOLUME)
+                    new_value = global_var.SPEED - 1
+                    global_var.SPEED = max(new_value, MIN_SPEED)
                 if width_plus_button.is_clicked(event):
                     new_value = global_var.WIDTH + 1
                     global_var.WIDTH = min(new_value, MAX_WIDTH)

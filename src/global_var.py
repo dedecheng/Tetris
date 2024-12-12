@@ -1,3 +1,4 @@
-WIDTH = 10
+WIDTH = 4
 SPEED = 1
+VOLUME = 0.5
 PLAYER_NAME = ''
