@@ -36,7 +36,7 @@ bord_width = 2
 max_touch_ground_number = 10
 line_color = (255, 255, 255)  # 灰色
 transparency = 75
-background_image = pygame.image.load(str(root_dir) + r'.\assets\Group 6.png')
+background_image = pygame.image.load(str(root_dir) + r'.\assets\pictures\Group 6.png')
 background_image = pygame.transform.scale(background_image, (WINDOW_WIDTH, WINDOW_HEIGHT))
 
 
@@ -108,6 +108,7 @@ def game_loop():
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
+                return
             if event.type == MOUSEBUTTONDOWN:
                 if PAUSE_BUTTON_RECT.collidepoint(event.pos):  # 檢測是否點擊暫停按鈕
                     # 切換暫停狀態
@@ -216,10 +217,6 @@ def game_loop():
                     border_radius=5
                 )
 
-                # pygame.draw.rect(screen, color,
-                #                  (x * GRID_SIZE + bord_width, (height - y - 1) * GRID_SIZE + bord_width,
-                #                   GRID_SIZE - bord_width * 2, GRID_SIZE - bord_width * 2))
-
         # 繪製落下位置
         transparency_surface = pygame.Surface((GRID_SIZE, GRID_SIZE), pygame.SRCALPHA)
         for x, y in game_manager.preview_block.cells:
@@ -231,9 +228,6 @@ def game_loop():
                 transparency_surface.fill((color[0], color[1], color[2], transparency))
                 screen.blit(transparency_surface,
                             ((x + HORIZONTAL_BLANK) * GRID_SIZE, (HEIGHT - y - 1 + VERTICAL_BLANK) * GRID_SIZE))
-                # pygame.draw.rect(screen, color,
-                #                  ((x + HORIZONTAL_BLANK) * GRID_SIZE, (HEIGHT - y - 1) * GRID_SIZE,
-                #                   GRID_SIZE, GRID_SIZE))
 
         pygame.draw.rect(
             screen,

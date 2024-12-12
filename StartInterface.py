@@ -1,7 +1,7 @@
 from math import radians
 
-from Button import Button, RectButton, CircleButton
-from InputBox import InputBox
+from src.Button import Button, RectButton, CircleButton
+from src.InputBox import InputBox
 import pygame, sys
 from src.GameWindow import game_loop
 from src.RankingBoard import RankingBoard
@@ -17,14 +17,14 @@ SCREENHEIGHT = 540
 SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
 
 # import images
-BG = pygame.image.load("../assets/pictures/BG.png")
-TITLE = pygame.image.load("../assets/pictures/TETRIS.png")
-QUIT_BUTTON = pygame.image.load("../assets/pictures/QuitButton.png")
-BGassets = pygame.image.load("../assets/pictures/BGasset.png")
-MOUSE_IMAGE = pygame.image.load("../assets/pictures/mouse.png")
+BG = pygame.image.load("./assets/pictures/BG.png")
+TITLE = pygame.image.load("./assets/pictures/TETRIS.png")
+QUIT_BUTTON = pygame.image.load("./assets/pictures/QuitButton.png")
+BGassets = pygame.image.load("./assets/pictures/BGasset.png")
+MOUSE_IMAGE = pygame.image.load("./assets/pictures/mouse.png")
 
 # import music
-pygame.mixer.music.load("../assets/music/BGmusic.mp3")
+pygame.mixer.music.load("./assets/music/BGmusic.mp3")
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.2)
 
@@ -113,11 +113,11 @@ def main_menu():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if START_BTN.is_clicked(event):
-                    play()
+                    show_input_box = True
                 if RANK_BTN.is_clicked(event):
                     ranking_board.render()
                     SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
-                    show_input_box = True
+
                 if QUIT_BTN.is_clicked(event):
                     pygame.quit()
                     sys.exit()
@@ -128,14 +128,15 @@ def main_menu():
                 if name:
                     player_name = name
                     play()  # Start the game after input is complete
-                    return  # Exit to stop showing input box
+                    show_input_box = False
+                    SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
 
         if show_input_box:
             INPUT_BOX.update()
             INPUT_BOX.draw(SCREEN)
 
         pygame.display.update()
-        clock.tick(30)
+        clock.tick(60)
 
 if __name__ == "__main__":
     main_menu()

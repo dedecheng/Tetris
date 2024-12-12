@@ -4,10 +4,10 @@ pygame.mixer.init()
 
 # setting font
 def get_font(size): # Returns Press-Start-2P in the desired size
-    return pygame.font.Font(pygame.font.match_font("../assets/font/STHupo.ttf"), size)
+    return pygame.font.Font(pygame.font.match_font("./assets/font/STHupo.ttf"), size)
 
 class Button:
-    click_sound = pygame.mixer.Sound("../assets/music/button-click.wav")
+    click_sound = pygame.mixer.Sound("./assets/music/button-click.wav")
     click_sound.set_volume(1.2)
 
     def __init__(self, x, y, width, height, text, font, color, hover_color, text_color):

@@ -12,8 +12,8 @@ class RankingBoard:
         self.rankings = self.load_rankings()
 
         # 加載背景與按鈕
-        self.bg_image = pygame.image.load(str(root_dir) + r'.\assets\ranking_bg.png')  # 排行榜背景
-        self.back_button_image = pygame.image.load(str(root_dir) + r".\assets\back_button.png")  # 返回按鈕圖片
+        self.bg_image = pygame.image.load(str(root_dir) + r'.\assets\pictures\ranking_bg.png')  # 排行榜背景
+        self.back_button_image = pygame.image.load(str(root_dir) + r".\assets\pictures\back_button.png")  # 返回按鈕圖片
         self.back_button_rect = self.back_button_image.get_rect(topleft=(50, 50))
 
     def load_rankings(self):
