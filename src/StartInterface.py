@@ -1,9 +1,9 @@
+from math import radians
+
 from Button import Button, RectButton, CircleButton
 from InputBox import InputBox
 import pygame, sys
 
-from src.Button import get_font
-from src.InputBox import InputBox
 
 # initialize
 pygame.init()
@@ -84,11 +84,12 @@ def main_menu():
                             "#6BAEB9", "#2B6169", "#FFFFFF")
     RANK_BTN = CircleButton(425, 325, 45, "RANK", get_font(25), "#2B6169", "#F9BC60", "#FFFFFF")
     OPTION_BTN =  CircleButton(525, 325, 45, "SET", get_font(25), "#2B6169", "#30AB3D", "#FFFFFF")
-    x = (SCREENWIDTH - 200) // 2
-    y = (SCREENHEIGHT - 40) // 2
+    input_x = (SCREENWIDTH - 300) // 2
+    input_y = (SCREENHEIGHT - 120) // 2
     # input box
-    INPUT_BOX = InputBox(x, y, width=200, height=40, font=get_font(30), text_color="#004643", box_color="#2B6169",
-                         active_color="#FFFFFF")
+    INPUT_BOX = InputBox(input_x, input_y, width=300, height=120, font=get_font(20), text_color="#004643", box_color="#D9D9D9",
+                         active_color="#FFFFFF", label="Insert your name:")
+
     while True:
         SCREEN.fill((43, 97, 105))
 
@@ -99,7 +100,6 @@ def main_menu():
 
         MENU_MOUSE_POS = pygame.mouse.get_pos()
         MENU_MOUSE_RECT = (MENU_MOUSE_POS[0] - 0.8 *MOUSE_IMAGE.get_width(), MENU_MOUSE_POS[1] - 0.75*MOUSE_IMAGE.get_height())
-
 
         # Place images: title, ellipse, quit
         image_width, image_height = SMALL_TITLE.get_size()
@@ -116,7 +116,6 @@ def main_menu():
         OPTION_BTN.draw(SCREEN)
         RANK_BTN.draw(SCREEN)
         SCREEN.blit(MOUSE_IMAGE, MENU_MOUSE_RECT)
-
 
         # Event handling
         for event in pygame.event.get():

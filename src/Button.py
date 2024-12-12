@@ -26,7 +26,7 @@ class Button:
 
         # Draw the button with color change on hover
         color = self.hover_color if self.is_hovered else self.color
-        pygame.draw.rect(screen, color, self.rect, border_radius=100)
+        pygame.draw.rect(screen, color, self.rect)
 
         # Draw the text centered in the button
         text_surface = self.font.render(self.text, True, self.text_color)
@@ -44,6 +44,19 @@ class Button:
 class RectButton(Button):
     def __init__(self, x, y, width, height, text, font, color, hover_color, text_color):
         super().__init__(x, y, width, height, text, font, color, hover_color, text_color)
+    def draw(self, screen):
+        # Check if the mouse is hovered over the button
+        mouse_pos = pygame.mouse.get_pos()
+        self.is_hovered = self.rect.collidepoint(mouse_pos)
+
+        # Draw the button with color change on hover
+        color = self.hover_color if self.is_hovered else self.color
+        pygame.draw.rect(screen, color, self.rect, border_radius=100)
+
+        # Draw the text centered in the button
+        text_surface = self.font.render(self.text, True, self.text_color)
+        text_rect = text_surface.get_rect(center=self.rect.center)
+        screen.blit(text_surface, text_rect)
 
 class CircleButton(Button):
     def __init__(self, x, y, radius, text, font, color, hover_color, text_color):
