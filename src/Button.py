@@ -2,13 +2,13 @@ import pygame, math
 
 pygame.mixer.init()
 
-
 # setting font
 def get_font(size): # Returns Press-Start-2P in the desired size
     return pygame.font.Font(pygame.font.match_font("../assets/STHupo.ttf"), size)
 
 class Button:
     click_sound = pygame.mixer.Sound("../assets/button-click.wav")
+    click_sound.set_volume(1.2)
 
     def __init__(self, x, y, width, height, text, font, color, hover_color, text_color):
         self.text = text
@@ -68,6 +68,8 @@ class CircleButton(Button):
 
     def is_clicked(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if self.click_sound:
+                self.click_sound.play()
             distance = math.dist(event.pos, (self.rect.centerx, self.rect.centery))
             return distance <= self.radius
         return False

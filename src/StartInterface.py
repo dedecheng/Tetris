@@ -1,5 +1,9 @@
 from Button import Button, RectButton, CircleButton
+from InputBox import InputBox
 import pygame, sys
+
+from src.Button import get_font
+from src.InputBox import InputBox
 
 # initialize
 pygame.init()
@@ -39,6 +43,7 @@ new_width = QUIT_BUTTON.get_width() * 0.5
 new_height = QUIT_BUTTON.get_height() * 0.5
 SMALL_QUIT = pygame.transform.smoothscale(QUIT_BUTTON, (new_width, new_height))
 
+
 # setting font
 def get_font(size):  # Returns Press-Start-2P in the desired size
     return pygame.font.Font(pygame.font.match_font('arialblack'), size)
@@ -69,13 +74,21 @@ def options():
         pygame.display.update()
 
 def main_menu():
+    clock = pygame.time.Clock()
+    player_name = None
+    show_input_box = False
+
     # Create buttons
     START_BTN = RectButton(150, 280, 150, 90, "START", get_font(25), "#2B6169", "#E16162", "#FFFFFF")
-    QUIT_BTN = CircleButton(SCREENWIDTH * 0.87, SCREENHEIGHT - SMALL_QUIT.get_height() * 1.5, 50, "QUIT", get_font(30),
-                            "#2B6169", "#E16162", "#FFFFFF")
+    QUIT_BTN = CircleButton(SCREENWIDTH * 0.906, SCREENHEIGHT - SMALL_QUIT.get_height() * 1, 30, "", get_font(30),
+                            "#6BAEB9", "#2B6169", "#FFFFFF")
     RANK_BTN = CircleButton(425, 325, 45, "RANK", get_font(25), "#2B6169", "#F9BC60", "#FFFFFF")
     OPTION_BTN =  CircleButton(525, 325, 45, "SET", get_font(25), "#2B6169", "#30AB3D", "#FFFFFF")
-
+    x = (SCREENWIDTH - 200) // 2
+    y = (SCREENHEIGHT - 40) // 2
+    # input box
+    INPUT_BOX = InputBox(x, y, width=200, height=40, font=get_font(30), text_color="#004643", box_color="#2B6169",
+                         active_color="#FFFFFF")
     while True:
         SCREEN.fill((43, 97, 105))
 
@@ -95,19 +108,15 @@ def main_menu():
 
         SCREEN.blit(SMALL_TITLE, (title_x, title_y))
         SCREEN.blit(SMALL_ELLIPSE, (0, SCREENHEIGHT - SMALL_ELLIPSE.get_height()))
+        QUIT_BTN.draw(SCREEN)
         SCREEN.blit(SMALL_QUIT, (SCREENWIDTH * 0.87, SCREENHEIGHT - SMALL_QUIT.get_height() * 1.5))
-
-        # Draw buttons manually if not using button classes (comment this part if using classes)
-        pygame.draw.rect(SCREEN, (225, 97, 98), (150, 280, 150, 90), border_radius=100)  # Start button
-        pygame.draw.ellipse(SCREEN, (249, 188, 96), (380, 280, 90, 90))  # Option button
-        pygame.draw.ellipse(SCREEN, (43, 97, 105), (480, 280, 90, 90))  # Rank button
 
         # Draw the buttons (Rect and Circle buttons)
         START_BTN.draw(SCREEN)
-        QUIT_BTN.draw(SCREEN)
         OPTION_BTN.draw(SCREEN)
         RANK_BTN.draw(SCREEN)
         SCREEN.blit(MOUSE_IMAGE, MENU_MOUSE_RECT)
+
 
         # Event handling
         for event in pygame.event.get():
@@ -117,11 +126,24 @@ def main_menu():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if START_BTN.is_clicked(event):
-                    play()
+                    show_input_box = True
                 if QUIT_BTN.is_clicked(event):
                     pygame.quit()
                     sys.exit()
 
+            if show_input_box:
+                # Handle player name input
+                name = INPUT_BOX.handle_event(event)
+                if name:
+                    player_name = name
+                    play()  # Start the game after input is complete
+                    return  # Exit to stop showing input box
+
+        if show_input_box:
+            INPUT_BOX.update()
+            INPUT_BOX.draw(SCREEN)
+
         pygame.display.update()
+        clock.tick(30)
 
 main_menu()
