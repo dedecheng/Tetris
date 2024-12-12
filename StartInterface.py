@@ -1,7 +1,11 @@
-from src.Button import Button, RectButton, CircleButton
+from math import radians
+
+from Button import Button, RectButton, CircleButton
+from InputBox import InputBox
 import pygame, sys
 from src.GameWindow import game_loop
 from src.RankingBoard import RankingBoard
+
 
 # initialize
 pygame.init()
@@ -13,14 +17,14 @@ SCREENHEIGHT = 540
 SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
 
 # import images
-BG = pygame.image.load("assets/BG.png")
-TITLE = pygame.image.load("assets/TETRIS.png")
-QUIT_BUTTON = pygame.image.load("assets/QuitButton.png")
-BGassets = pygame.image.load("assets/BGasset.png")
-MOUSE_IMAGE = pygame.image.load("assets/mouse.png")
+BG = pygame.image.load("../assets/pictures/BG.png")
+TITLE = pygame.image.load("../assets/pictures/TETRIS.png")
+QUIT_BUTTON = pygame.image.load("../assets/pictures/QuitButton.png")
+BGassets = pygame.image.load("../assets/pictures/BGasset.png")
+MOUSE_IMAGE = pygame.image.load("../assets/pictures/mouse.png")
 
 # import music
-pygame.mixer.music.load("assets/BGmusic.mp3")
+pygame.mixer.music.load("../assets/music/BGmusic.mp3")
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.2)
 
@@ -58,12 +62,21 @@ def options():
 
 def main_menu():
     SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
+    clock = pygame.time.Clock()
+    player_name = None
+    show_input_box = False
+
     # Create buttons
     START_BTN = RectButton(150, 280, 150, 90, "START", get_font(25), "#2B6169", "#E16162", "#FFFFFF")
-    QUIT_BTN = CircleButton(SCREENWIDTH * 0.87, SCREENHEIGHT - SMALL_QUIT.get_height() * 1.5, 50, "QUIT", get_font(30),
-                            "#2B6169", "#E16162", "#FFFFFF")
+    QUIT_BTN = CircleButton(SCREENWIDTH * 0.906, SCREENHEIGHT - SMALL_QUIT.get_height() * 1, 30, "", get_font(30),
+                            "#6BAEB9", "#2B6169", "#FFFFFF")
     RANK_BTN = CircleButton(425, 325, 45, "RANK", get_font(25), "#2B6169", "#F9BC60", "#FFFFFF")
     OPTION_BTN =  CircleButton(525, 325, 45, "SET", get_font(25), "#2B6169", "#30AB3D", "#FFFFFF")
+    input_x = (SCREENWIDTH - 300) // 2
+    input_y = (SCREENHEIGHT - 120) // 2
+    # input box
+    INPUT_BOX = InputBox(input_x, input_y, width=300, height=120, font=get_font(20), text_color="#004643", box_color="#D9D9D9",
+                         active_color="#FFFFFF", label="Insert your name:")
 
     while True:
         SCREEN.fill((43, 97, 105))
@@ -76,7 +89,6 @@ def main_menu():
         MENU_MOUSE_POS = pygame.mouse.get_pos()
         MENU_MOUSE_RECT = (MENU_MOUSE_POS[0] - 0.8 *MOUSE_IMAGE.get_width(), MENU_MOUSE_POS[1] - 0.75*MOUSE_IMAGE.get_height())
 
-
         # Place images: title, ellipse, quit
         image_width, image_height = SMALL_TITLE.get_size()
         title_x = (SCREENWIDTH - image_width) // 2
@@ -84,16 +96,11 @@ def main_menu():
 
         SCREEN.blit(SMALL_TITLE, (title_x, title_y))
         SCREEN.blit(SMALL_ELLIPSE, (0, SCREENHEIGHT - SMALL_ELLIPSE.get_height()))
+        QUIT_BTN.draw(SCREEN)
         SCREEN.blit(SMALL_QUIT, (SCREENWIDTH * 0.87, SCREENHEIGHT - SMALL_QUIT.get_height() * 1.5))
-
-        # Draw buttons manually if not using button classes (comment this part if using classes)
-        pygame.draw.rect(SCREEN, (225, 97, 98), (150, 280, 150, 90), border_radius=100)  # Start button
-        pygame.draw.ellipse(SCREEN, (249, 188, 96), (380, 280, 90, 90))  # Option button
-        pygame.draw.ellipse(SCREEN, (43, 97, 105), (480, 280, 90, 90))  # Rank button
 
         # Draw the buttons (Rect and Circle buttons)
         START_BTN.draw(SCREEN)
-        QUIT_BTN.draw(SCREEN)
         OPTION_BTN.draw(SCREEN)
         RANK_BTN.draw(SCREEN)
         SCREEN.blit(MOUSE_IMAGE, MENU_MOUSE_RECT)
@@ -110,11 +117,25 @@ def main_menu():
                 if RANK_BTN.is_clicked(event):
                     ranking_board.render()
                     SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
+                    show_input_box = True
                 if QUIT_BTN.is_clicked(event):
                     pygame.quit()
                     sys.exit()
 
+            if show_input_box:
+                # Handle player name input
+                name = INPUT_BOX.handle_event(event)
+                if name:
+                    player_name = name
+                    play()  # Start the game after input is complete
+                    return  # Exit to stop showing input box
+
+        if show_input_box:
+            INPUT_BOX.update()
+            INPUT_BOX.draw(SCREEN)
+
         pygame.display.update()
+        clock.tick(30)
 
 if __name__ == "__main__":
     main_menu()
