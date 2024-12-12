@@ -33,10 +33,9 @@ screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris")
 clock = pygame.time.Clock()
 bord_width = 2
-max_touch_ground_times = 3
+max_touch_ground_number = 10
 line_color = (255, 255, 255)  # 灰色
 transparency = 75
-is_paused = False
 background_image = pygame.image.load(str(root_dir) + r'.\assets\Group 6.png')
 background_image = pygame.transform.scale(background_image, (WINDOW_WIDTH, WINDOW_HEIGHT))
 
@@ -52,17 +51,18 @@ def draw_pause_button():
 
 def game_loop():
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-    global is_paused
     running = True
     game_manager = GameManager(WIDTH, HEIGHT)
 
     fall_time = 0
     fall_speed = INIT_FALL_SPEED
-    current_touch_ground_times = 0
+    current_touch_ground_number = 0
     enable_movement = True
     move_time = 0
     move_speed = 150
     elapsed_time = 0
+    touch_ground_time = 0
+    touch_ground_speed = 1000
     while running:
         screen.fill((171, 209, 198))  # screem color
 
@@ -95,7 +95,7 @@ def game_loop():
         PAUSE_BUTTON_RECT = draw_pause_button()
 
         delta_time = clock.tick(30)
-        if not is_paused:
+        if game_manager.game_state == GameState.Playing:
             fall_time += delta_time
             move_time += delta_time
             elapsed_time += delta_time
@@ -110,8 +110,12 @@ def game_loop():
                 running = False
             if event.type == MOUSEBUTTONDOWN:
                 if PAUSE_BUTTON_RECT.collidepoint(event.pos):  # 檢測是否點擊暫停按鈕
-                    is_paused = not is_paused  # 切換暫停狀態
-            if not is_paused and event.type == KEYDOWN:  # 只有在未暫停時處理按鍵事件
+                    # 切換暫停狀態
+                    if game_manager.game_state == GameState.Paused:
+                        game_manager.game_state = GameState.Playing
+                    else:
+                        game_manager.game_state = GameState.Paused
+            if game_manager.game_state == GameState.Playing and event.type == KEYDOWN:  # 只有在未暫停時處理按鍵事件
                 enable_movement = False
                 move_time = 0
                 if event.key == K_LEFT:
@@ -123,34 +127,21 @@ def game_loop():
                     fall_time = 0
                 elif event.key == K_UP:
                     game_manager.rotate_right()
+                    if game_manager.ground_touched():
+                        current_touch_ground_number += 1
+                        if current_touch_ground_number < max_touch_ground_number:
+                            touch_ground_time = 0
                 elif event.key == K_z:
                     game_manager.rotate_left()
+                    if game_manager.ground_touched():
+                        current_touch_ground_number += 1
+                        if current_touch_ground_number < max_touch_ground_number:
+                            print(current_touch_ground_number)
+                            touch_ground_time = 0
                 elif event.key == K_SPACE:
                     game_manager.straight_down()
                 elif event.key == K_c:
                     game_manager.hold_block()
-
-        if not is_paused:
-            if game_manager.game_state == GameState.Playing:
-                # 偵測持續按鍵
-                keys = pygame.key.get_pressed()
-                if enable_movement:
-                    if keys[pygame.K_DOWN]:  # 按下「下」箭頭鍵
-                        game_manager.move_down()
-                    if keys[pygame.K_LEFT]:  # 按下「左」箭頭鍵
-                        game_manager.move_left()
-                    if keys[pygame.K_RIGHT]:  # 按下「右」箭頭鍵
-                        game_manager.move_right()
-
-                # 自動下墜
-                if fall_time > fall_speed:
-                    game_manager.move_down()
-                    if game_manager.ground_touched():
-                        current_touch_ground_times += 1
-                        if current_touch_ground_times >= max_touch_ground_times:
-                            game_manager.place_block()
-                            current_touch_ground_times = 0
-                    fall_time = 0
 
         if game_manager.game_state == GameState.Playing:
             # 偵測持續按鍵
@@ -163,10 +154,23 @@ def game_loop():
                 if keys[pygame.K_RIGHT]:  # 按下「右」箭頭鍵
                     game_manager.move_right()
 
+            # 自動下墜
+            if fall_time > fall_speed:
+                game_manager.move_down()
+                fall_time = 0
+
+            # 偵測延遲鎖定
+            if game_manager.ground_touched():
+                touch_ground_time += delta_time
+                if touch_ground_time >= touch_ground_speed:
+                    game_manager.place_block()
+                    touch_ground_time = 0
+                    current_touch_ground_number = 0
+
             if move_time > move_speed:
                 enable_movement = True
 
-        if is_paused:  # 如果暫停，顯示「暫停」提示
+        if game_manager.game_state == GameState.Paused:  # 如果暫停，顯示「暫停」提示
             font = pygame.font.SysFont('Arial', 50)
             pause_text = font.render('Paused', True, (255, 255, 255))
             pause_rect = pause_text.get_rect(center=(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
@@ -335,4 +339,5 @@ def game_loop():
 
     pygame.quit()
 
-
+if __name__ == "__main__":
+    game_loop()

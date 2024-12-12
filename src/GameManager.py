@@ -13,6 +13,7 @@ import os
 class GameState(Enum):
     Playing = 0
     GameOver = 1
+    Paused = 2
 
 class GameManager:
     def __init__(self, w, h):
