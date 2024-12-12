@@ -44,8 +44,24 @@ def get_font(size):  # Returns Press-Start-2P in the desired size
     return pygame.font.Font(pygame.font.match_font('arialblack'), size)
 
 def play():
+    BACK_BTN = CircleButton(SCREENWIDTH * 0.87, SCREENHEIGHT - SMALL_QUIT.get_height() * 1.5, 50, "BACK", get_font(30),
+                            "#2B6169", "#E16162", "#FFFFFF")
     while True:
         SCREEN.fill("#2B6169")
+        MENU_MOUSE_POS = pygame.mouse.get_pos()
+        MENU_MOUSE_RECT = (
+        MENU_MOUSE_POS[0] - 0.8 * MOUSE_IMAGE.get_width(), MENU_MOUSE_POS[1] - 0.75 * MOUSE_IMAGE.get_height())
+        BACK_BTN.draw(SCREEN)
+
+        # Event handling
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if BACK_BTN.is_clicked(event):
+                    main_menu()
         pygame.display.update()
 
 def options():
