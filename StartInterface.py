@@ -6,6 +6,7 @@ import pygame, sys
 from src.GameWindow import game_loop
 from src.RankingBoard import RankingBoard
 from src.setting import setting_page
+import src.global_var as global_var
 
 # initialize
 pygame.init()
@@ -45,7 +46,6 @@ new_width = QUIT_BUTTON.get_width() * 0.5
 new_height = QUIT_BUTTON.get_height() * 0.5
 SMALL_QUIT = pygame.transform.smoothscale(QUIT_BUTTON, (new_width, new_height))
 
-ranking_board = RankingBoard()
 # setting font
 def get_font(size):  # Returns Press-Start-2P in the desired size
     return pygame.font.Font(pygame.font.match_font('arialblack'), size)
@@ -113,6 +113,7 @@ def main_menu():
                 if START_BTN.is_clicked(event):
                     show_input_box = True
                 if RANK_BTN.is_clicked(event):
+                    ranking_board = RankingBoard()
                     ranking_board.render()
                     SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
                 if OPTION_BTN.is_clicked(event):
@@ -126,7 +127,7 @@ def main_menu():
                 # Handle player name input
                 name = INPUT_BOX.handle_event(event)
                 if name:
-                    player_name = name
+                    global_var.PLAYER_NAME = name
                     play()  # Start the game after input is complete
                     show_input_box = False
                     SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))

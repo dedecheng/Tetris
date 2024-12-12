@@ -1,2 +1,3 @@
-WIDTH = 4
+WIDTH = 10
 SPEED = 1
+PLAYER_NAME = ''
