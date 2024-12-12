@@ -1,7 +1,7 @@
-import pygame, sys
+import pygame
 import json
 from pathlib import Path
-
+import sys
 
 class RankingBoard:
     def __init__(self):
@@ -40,6 +40,8 @@ class RankingBoard:
         with open(self.ranking_file, "w", encoding="utf-8") as file:
             json.dump(self.rankings, file, ensure_ascii=False, indent=4)
 
+
+
     def render(self):
         screen = pygame.display.set_mode((800, 600))
         while True:
@@ -59,6 +61,8 @@ class RankingBoard:
 
             # 繪製排行榜數據
             for idx, entry in enumerate(self.rankings):
+                if idx >= 8:
+                    break
                 row_font = pygame.font.Font(None, 30)
                 name = entry["name"]
                 line = entry["line"]
