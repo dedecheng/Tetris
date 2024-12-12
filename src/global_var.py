@@ -1,1 +1,2 @@
 WIDTH = 4
+SPEED = 1

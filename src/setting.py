@@ -21,7 +21,6 @@ MIN_WIDTH = 4
 def setting_page():
     # 初始化參數
     volume = 1
-    speed = 5
 
     running = True
     while running:
@@ -59,7 +58,7 @@ def setting_page():
                            SCREENWIDTH / 40)
         pygame.draw.rect(screen, (43, 97, 105), rect, border_radius=100)
         rect = pygame.Rect(17 * SCREENWIDTH / 40, 6 * SCREENHEIGHT / 20 + SCREENWIDTH / 80,
-                           16 * SCREENWIDTH / 40 * ((speed - MIN_SPEED) / (MAX_SPEED - MIN_SPEED)),
+                           16 * SCREENWIDTH / 40 * ((global_var.SPEED - MIN_SPEED) / (MAX_SPEED - MIN_SPEED)),
                            SCREENWIDTH / 40)
         pygame.draw.rect(screen, (225, 97, 98), rect, border_radius=100)
 
@@ -102,11 +101,11 @@ def setting_page():
                     new_value = volume - (MAX_VOLUME - MIN_VOLUME) / 9
                     volume = max(new_value, MIN_VOLUME)
                 if speed_plus_button.is_clicked(event):
-                    new_value = speed + (MAX_SPEED - MIN_SPEED) / 9
-                    speed = min(new_value, MAX_SPEED)
+                    new_value = global_var.SPEED + (MAX_SPEED - MIN_SPEED) / 9
+                    global_var.SPEED = min(new_value, MAX_SPEED)
                 if speed_minus_button.is_clicked(event):
-                    new_value = speed - (MAX_SPEED - MIN_SPEED) / 9
-                    speed = max(new_value, MIN_VOLUME)
+                    new_value = global_var.SPEED - (MAX_SPEED - MIN_SPEED) / 9
+                    global_var.SPEED = max(new_value, MIN_VOLUME)
                 if width_plus_button.is_clicked(event):
                     new_value = global_var.WIDTH + 1
                     global_var.WIDTH = min(new_value, MAX_WIDTH)
