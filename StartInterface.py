@@ -5,7 +5,7 @@ from src.InputBox import InputBox
 import pygame, sys
 from src.GameWindow import game_loop
 from src.RankingBoard import RankingBoard
-
+from src.setting import setting_page
 
 # initialize
 pygame.init()
@@ -56,9 +56,7 @@ def play():
     #     SCREEN.fill("#2B6169")
     #     pygame.display.update()
 
-def options():
-    while True:
-        pygame.display.update()
+
 
 def main_menu():
     SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
@@ -117,7 +115,9 @@ def main_menu():
                 if RANK_BTN.is_clicked(event):
                     ranking_board.render()
                     SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
-
+                if OPTION_BTN.is_clicked(event):
+                    setting_page()
+                    SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
                 if QUIT_BTN.is_clicked(event):
                     pygame.quit()
                     sys.exit()

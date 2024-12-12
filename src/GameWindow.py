@@ -47,9 +47,20 @@ def draw_pause_button():
     pygame.draw.rect(screen, (171, 209, 198), (WINDOW_WIDTH - 43, 15, 8, 20))  # 左豎線
     pygame.draw.rect(screen, (171, 209, 198), (WINDOW_WIDTH - 28, 15, 8, 20))  # 右豎線
     return PAUSE_BUTTON_RECT
+def initialize():
+    global WIDTH
+    WIDTH = global_var.WIDTH
+    WINDOW_WIDTH = (WIDTH + HORIZONTAL_BLANK * 2 + 10) * GRID_SIZE
+    PREVIEW_OFFSET = WIDTH + 19
 
+    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+    clock = pygame.time.Clock()
+
+    background_image = pygame.image.load(str(root_dir) + r'.\assets\pictures\Group 6.png')
+    background_image = pygame.transform.scale(background_image, (WINDOW_WIDTH, WINDOW_HEIGHT))
 
 def game_loop():
+    initialize()
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     running = True
     game_manager = GameManager(WIDTH, HEIGHT)

@@ -1,6 +1,7 @@
 import pygame
 import sys
-from Button import Button, get_font
+from src.Button import Button, get_font
+import src.global_var as global_var
 # 初始化 Pygame
 pygame.init()
 
@@ -17,12 +18,10 @@ MAX_SPEED = 10
 MIN_SPEED = 1
 MAX_WIDTH = 10
 MIN_WIDTH = 4
-
 def setting_page():
     # 初始化參數
     volume = 1
     speed = 5
-    width = 9
 
     running = True
     while running:
@@ -77,13 +76,13 @@ def setting_page():
         rect = pygame.Rect(35 * SCREENWIDTH / 80, 9 * SCREENHEIGHT / 20, 3 * SCREENWIDTH / 40,
                            SCREENWIDTH / 20)
         pygame.draw.rect(screen, (255, 255, 255), rect)
-        width_value_surface = font.render(str(width), True, (0, 70, 67), (255,255,255))
+        width_value_surface = font.render(str(global_var.WIDTH), True, (0, 70, 67), (255,255,255))
         text_rect = width_value_surface.get_rect()
         text_rect.center = rect.center
         screen.blit(width_value_surface, text_rect)
 
         #back
-        back_button_image = pygame.image.load("../assets/back_button.png")
+        back_button_image = pygame.image.load("./assets/pictures/back_button.png")
         original_width, original_height = back_button_image.get_size()
         scale_factor = SCREENWIDTH / 2900
         new_width = int(original_width * scale_factor)
@@ -109,11 +108,11 @@ def setting_page():
                     new_value = speed - (MAX_SPEED - MIN_SPEED) / 9
                     speed = max(new_value, MIN_VOLUME)
                 if width_plus_button.is_clicked(event):
-                    new_value = width + 1
-                    width = min(new_value, MAX_WIDTH)
+                    new_value = global_var.WIDTH + 1
+                    global_var.WIDTH = min(new_value, MAX_WIDTH)
                 if width_minus_button.is_clicked(event):
-                    new_value = width - 1
-                    width = max(new_value, MIN_WIDTH)
+                    new_value = global_var.WIDTH - 1
+                    global_var.WIDTH = max(new_value, MIN_WIDTH)
                 if back_button_rect.collidepoint(event.pos):
                     return
 
@@ -122,5 +121,4 @@ def setting_page():
 
         pygame.display.flip()
 
-if __name__ == "__main__":
-    setting_page()
+
