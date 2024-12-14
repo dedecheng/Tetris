@@ -27,7 +27,7 @@ class GameManager:
         self.blocks_queue = deque()
         self.hold = None
         self.is_hold = False
-        self.generate_pos = [int(w / 2), int(h)]
+        self.generate_pos = [int(w / 2), int(h)-2]
         self.current_block = self.next_block()  # 初始方塊
         self.preview_block = self.current_block
         self.line_cleared = 0
