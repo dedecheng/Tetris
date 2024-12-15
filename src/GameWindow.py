@@ -226,20 +226,7 @@ def game_loop():
             x += game_manager.current_block.pos[0]
             y += game_manager.current_block.pos[1]
             cell = game_manager.current_block.type
-            if cell != BlockType.I:
-                color = Block.block_color[cell.value]
-                pygame.draw.rect(
-                    screen,
-                    color,
-                    (
-                        (x + HORIZONTAL_BLANK) * GRID_SIZE,
-                        (HEIGHT - y - 1 + VERTICAL_BLANK) * GRID_SIZE,
-                        GRID_SIZE,
-                        GRID_SIZE
-                    ),
-                    border_radius=5
-                )
-            else:
+            if cell:
                 color = Block.block_color[cell.value]
                 pygame.draw.rect(
                     screen,
