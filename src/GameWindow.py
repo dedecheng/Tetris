@@ -328,9 +328,17 @@ def game_loop():
                 1  # 線條寬度
             )
         if game_manager.game_state == GameState.GameOver:
-            font = pygame.font.SysFont('Arial', 50)
-            text_surface = font.render('Game Over', True, (255, 255, 255), (0, 0, 0))
-            text_rect = text_surface.get_rect(center=(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
+            GG = pygame.image.load("./assets/pictures/GG.png")
+            STAR = pygame.image.load("./assets/pictures/star.png")
+            screen.blit(GG, ((WINDOW_WIDTH - GG.get_width()) // 2, (WINDOW_HEIGHT - GG.get_height()) // 2))
+            screen.blit(STAR, (((WINDOW_WIDTH - GG.get_width()) // 2 - STAR.get_width()//3), (WINDOW_HEIGHT - GG.get_height()) //2))
+            screen.blit(STAR, (((WINDOW_WIDTH - GG.get_width()) // 2 + STAR.get_width() * 1.5), (WINDOW_HEIGHT - GG.get_height()) //2 + STAR.get_height()))
+            STAR = pygame.transform.smoothscale(STAR, (STAR.get_width() * 0.5, STAR.get_height() * 0.5))
+            screen.blit(STAR, (((WINDOW_WIDTH - GG.get_width()) // 2 + STAR.get_width()//3), (WINDOW_HEIGHT - GG.get_height()) //2))
+            screen.blit(STAR, (((WINDOW_WIDTH - GG.get_width()) // 2 + STAR.get_width() * 3), (WINDOW_HEIGHT - GG.get_height()) //2 + STAR.get_height()))
+            font = pygame.font.SysFont('Arialblack', 80)
+            text_surface = font.render('Game Over', True, "#000000")
+            text_rect = text_surface.get_rect(center=(WINDOW_WIDTH / 2, (WINDOW_HEIGHT / 2) + 200))
             screen.blit(text_surface, text_rect)
 
         # 顯示消除行數
