@@ -17,7 +17,7 @@ GRID_SIZE = 30  # 方塊大小
 WIDTH = global_var.WIDTH
 HEIGHT = 20
 HORIZONTAL_BLANK = 4.5
-VERTICAL_BLANK = 1
+VERTICAL_BLANK = 2.2
 BOTTON_MARGIN = 1.5
 WINDOW_WIDTH = (WIDTH + HORIZONTAL_BLANK * 2 + 10) * GRID_SIZE
 WINDOW_HEIGHT = (HEIGHT + VERTICAL_BLANK + BOTTON_MARGIN) * GRID_SIZE
@@ -73,7 +73,7 @@ def initialize():
 
 def game_loop():
     initialize()
-    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT + 80))
     running = True
     game_manager = GameManager(WIDTH, HEIGHT)
     game_manager.player_name = global_var.PLAYER_NAME
@@ -312,7 +312,7 @@ def game_loop():
                         color,
                         (
                             (x + HORIZONTAL_BLANK + WIDTH) * PREVIEW_GRID_SIZE + ((HORIZONTAL_BLANK + WIDTH) * PREVIEW_GRID_SIZE) + 83,
-                            ((preview_num + 1) * 3 - y + VERTICAL_BLANK) * PREVIEW_GRID_SIZE + 10,
+                            ((preview_num + 1) * 3 - y + VERTICAL_BLANK) * PREVIEW_GRID_SIZE + 30,
                             PREVIEW_GRID_SIZE,
                             PREVIEW_GRID_SIZE
                         ),
@@ -328,7 +328,7 @@ def game_loop():
                     hold_color,
                     (
                         (x + HORIZONTAL_BLANK) * 20 + HORIZONTAL_BLANK * 10 - 77,  # X 坐標
-                        (2 - y + VERTICAL_BLANK) * 20 + 40,  # Y 坐標
+                        (2 - y + VERTICAL_BLANK) * 20 + 50,  # Y 坐標
                         20,
                         20
                     ),
@@ -361,22 +361,22 @@ def game_loop():
         # 顯示消除行數
         font = pygame.font.SysFont('Arial', 20)
         text_surface = font.render('line clear: ' + str(game_manager.line_cleared), True, (255, 255, 255))
-        screen.blit(text_surface, (HORIZONTAL_BLANK * GRID_SIZE + WIDTH * GRID_SIZE + 45, 0))
+        screen.blit(text_surface, (HORIZONTAL_BLANK * GRID_SIZE + WIDTH * GRID_SIZE + 45, 280))
 
         # 顯示分數
         font = pygame.font.SysFont('Arial', 20)
         text_surface = font.render('score: ' + str(game_manager.score), True, (255, 255, 255))
-        screen.blit(text_surface, (HORIZONTAL_BLANK * GRID_SIZE + WIDTH * GRID_SIZE + 55, 260))
+        screen.blit(text_surface, (HORIZONTAL_BLANK * GRID_SIZE + WIDTH * GRID_SIZE + 55, 310))
 
         # 顯示時間
         font = pygame.font.SysFont('Arial', 20)
         text_surface = font.render('time: ' + f"{elapsed_time / 1000} seconds", True, (255, 255, 255))
-        screen.blit(text_surface, (HORIZONTAL_BLANK * GRID_SIZE + WIDTH * GRID_SIZE + 55, 290))
+        screen.blit(text_surface, (HORIZONTAL_BLANK * GRID_SIZE + WIDTH * GRID_SIZE + 55, 340))
 
         # 顯示level
         font = pygame.font.SysFont('Arial', 20)
         text_surface = font.render('level: ' + f"{game_manager.game_level}", True, (255, 255, 255))
-        screen.blit(text_surface, (HORIZONTAL_BLANK * GRID_SIZE + WIDTH * GRID_SIZE + 55, 320))
+        screen.blit(text_surface, (HORIZONTAL_BLANK * GRID_SIZE + WIDTH * GRID_SIZE + 55, 370))
         pygame.display.update()
 
     pygame.quit()
