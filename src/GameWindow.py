@@ -16,8 +16,8 @@ pygame.init()
 GRID_SIZE = 30  # 方塊大小
 WIDTH = global_var.WIDTH
 HEIGHT = 20
-HORIZONTAL_BLANK = 2
-VERTICAL_BLANK = 1
+HORIZONTAL_BLANK = 4.5
+VERTICAL_BLANK = 2.2
 BOTTON_MARGIN = 1.5
 WINDOW_WIDTH = (WIDTH + HORIZONTAL_BLANK * 2 + 10) * GRID_SIZE
 WINDOW_HEIGHT = (HEIGHT + VERTICAL_BLANK + BOTTON_MARGIN) * GRID_SIZE
@@ -26,13 +26,13 @@ PREVIEW_WIDTH = 5  # 預覽區域的寬度（以格子為單位）
 PREVIEW_HEIGHT = 13  # 預覽區域的高度（以格子為單位）
 PREVIEW_GRID_SIZE = GRID_SIZE // 2  # 預覽區域內方塊縮小一半
 INIT_FALL_SPEED = 500  # 每 500 毫秒下墜一次
-LINES_TO_SPEEDUP = 5
+LINES_TO_SPEEDUP = 5 
 
 root_dir = Path(__file__).parent.parent
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris")
 clock = pygame.time.Clock()
-bord_width = 2
+bord_width = 2 
 max_touch_ground_number = 10
 line_color = (255, 255, 255)  # 灰色
 transparency = 75
@@ -65,7 +65,7 @@ def initialize():
     clock = pygame.time.Clock()
 
     background_image = pygame.image.load(str(root_dir) + r'.\assets\pictures\Group 6.png')
-    background_image = pygame.transform.scale(background_image, (WINDOW_WIDTH, WINDOW_HEIGHT))
+    background_image = pygame.transform.scale(background_image, (780, WINDOW_HEIGHT))
 
 
     INIT_FALL_SPEED = max(1000 - global_var.SPEED * 100, 10)
@@ -73,7 +73,7 @@ def initialize():
 
 def game_loop():
     initialize()
-    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT + 80))
     running = True
     game_manager = GameManager(WIDTH, HEIGHT)
     game_manager.player_name = global_var.PLAYER_NAME
@@ -93,12 +93,12 @@ def game_loop():
 
         pygame.draw.rect(
             screen,
-            (255, 255, 255),  # 邊框顏色：白色
+            (255, 255, 255),  # board border
             (
-                HORIZONTAL_BLANK * GRID_SIZE - 12,  # 左上角 X（稍微往左移）
-                VERTICAL_BLANK * GRID_SIZE - 12,  # 左上角 Y（稍微往上移）
-                WIDTH * GRID_SIZE + 25,  # 寬度（稍微增寬）
-                HEIGHT * GRID_SIZE + 25  # 高度（稍微增高）
+                HORIZONTAL_BLANK * GRID_SIZE - 12,  # 左上角 X
+                VERTICAL_BLANK * GRID_SIZE - 12,  # 左上角 Y
+                WIDTH * GRID_SIZE + 25,  # 寬度
+                HEIGHT * GRID_SIZE + 25  # 高度
             ),
             40,  # 邊框厚度
             border_radius=5
@@ -240,6 +240,7 @@ def game_loop():
                     border_radius=5
                 )
 
+
         # 繪製落下位置
         transparency_surface = pygame.Surface((GRID_SIZE, GRID_SIZE), pygame.SRCALPHA)
         for x, y in game_manager.preview_block.cells:
@@ -251,12 +252,12 @@ def game_loop():
                 transparency_surface.fill((color[0], color[1], color[2], transparency))
                 screen.blit(transparency_surface,
                             ((x + HORIZONTAL_BLANK) * GRID_SIZE, (HEIGHT - y - 1 + VERTICAL_BLANK) * GRID_SIZE))
-
+                
         pygame.draw.rect(
             screen,
-            (255, 255, 255),  # 白色邊框顏色
+            (255, 255, 255),  # preview border
             (
-                16 * 25 - 5,  # 邊框左上角 X（稍微向左偏移）
+                HORIZONTAL_BLANK * GRID_SIZE + WIDTH * GRID_SIZE + 40,  # 邊框左上角 X（稍微向左偏移）
                 VERTICAL_BLANK * GRID_SIZE - 5,  # 邊框左上角 Y（稍微向上偏移）
                 PREVIEW_WIDTH * PREVIEW_GRID_SIZE + 10,  # 寬度（稍微增寬）
                 PREVIEW_HEIGHT * PREVIEW_GRID_SIZE + 10  # 高度（稍微增高）
@@ -267,12 +268,36 @@ def game_loop():
 
         pygame.draw.rect(
             screen,
-            (249, 188, 96),  # 黑色背景
+            (249, 188, 96),  # preview
             (
-                16 * 25,  # 預覽框左上角 X
+                HORIZONTAL_BLANK * GRID_SIZE + WIDTH * GRID_SIZE + 45,  # 預覽框左上角 X
                 VERTICAL_BLANK * GRID_SIZE,  # 預覽框左上角 Y
                 PREVIEW_WIDTH * PREVIEW_GRID_SIZE,  # 預覽框寬度
                 PREVIEW_HEIGHT * PREVIEW_GRID_SIZE  # 預覽框高度
+            )
+        )
+
+        pygame.draw.rect(
+            screen,
+            (255, 255, 255),  # hold border
+            (
+                HORIZONTAL_BLANK * GRID_SIZE - 125,  # 邊框左上角 X（稍微向左偏移）
+                VERTICAL_BLANK * GRID_SIZE + 15,  # 邊框左上角 Y（稍微向上偏移）
+                PREVIEW_WIDTH * PREVIEW_GRID_SIZE + 21,  # 寬度（稍微增寬）
+                PREVIEW_HEIGHT * PREVIEW_GRID_SIZE - 70 # 高度（稍微增高）
+            ),
+            7,  # 邊框厚度
+            border_radius=5
+        )
+
+        pygame.draw.rect(
+            screen,
+            (249, 188, 96),  # hold
+            (
+                HORIZONTAL_BLANK * GRID_SIZE - 120,  # 預覽框左上角 X
+                VERTICAL_BLANK * GRID_SIZE + 20,  # 預覽框左上角 Y
+                PREVIEW_WIDTH * PREVIEW_GRID_SIZE + 11,  # 預覽框寬度
+                PREVIEW_HEIGHT * PREVIEW_GRID_SIZE -80 # 預覽框高度
             )
         )
 
@@ -286,12 +311,12 @@ def game_loop():
                         screen,
                         color,
                         (
-                            (x + PREVIEW_OFFSET) * PREVIEW_GRID_SIZE,
-                            ((preview_num + 1) * 3 - y + VERTICAL_BLANK) * PREVIEW_GRID_SIZE,
+                            (x + HORIZONTAL_BLANK + WIDTH) * PREVIEW_GRID_SIZE + ((HORIZONTAL_BLANK + WIDTH) * PREVIEW_GRID_SIZE) + 83,
+                            ((preview_num + 1) * 3 - y + VERTICAL_BLANK) * PREVIEW_GRID_SIZE + 30,
                             PREVIEW_GRID_SIZE,
                             PREVIEW_GRID_SIZE
                         ),
-                        border_radius=2  # 減小圓角半徑，因為預覽區塊較小
+                        border_radius= 2
                     )
 
         # 繪製 hold 方塊
@@ -302,12 +327,12 @@ def game_loop():
                     screen,
                     hold_color,
                     (
-                        (x + 2) * GRID_SIZE,  # X 坐標
-                        (2 - y + VERTICAL_BLANK) * GRID_SIZE,  # Y 坐標
-                        GRID_SIZE,
-                        GRID_SIZE
+                        (x + HORIZONTAL_BLANK) * 20 + HORIZONTAL_BLANK * 10 - 77,  # X 坐標
+                        (2 - y + VERTICAL_BLANK) * 20 + 50,  # Y 坐標
+                        20,
+                        20
                     ),
-                    border_radius=5
+                    border_radius=3
                 )
 
         # 繪製棋盤格線
@@ -344,22 +369,22 @@ def game_loop():
         # 顯示消除行數
         font = pygame.font.SysFont('Arial', 20)
         text_surface = font.render('line clear: ' + str(game_manager.line_cleared), True, (255, 255, 255))
-        screen.blit(text_surface, (WINDOW_WIDTH - 120, 0))
+        screen.blit(text_surface, (HORIZONTAL_BLANK * GRID_SIZE + WIDTH * GRID_SIZE + 45, 280))
 
         # 顯示分數
         font = pygame.font.SysFont('Arial', 20)
         text_surface = font.render('score: ' + str(game_manager.score), True, (255, 255, 255))
-        screen.blit(text_surface, (WINDOW_WIDTH - 120, 30))
+        screen.blit(text_surface, (HORIZONTAL_BLANK * GRID_SIZE + WIDTH * GRID_SIZE + 55, 310))
 
         # 顯示時間
         font = pygame.font.SysFont('Arial', 20)
         text_surface = font.render('time: ' + f"{elapsed_time / 1000} seconds", True, (255, 255, 255))
-        screen.blit(text_surface, (WINDOW_WIDTH - 120, 60))
+        screen.blit(text_surface, (HORIZONTAL_BLANK * GRID_SIZE + WIDTH * GRID_SIZE + 55, 340))
 
         # 顯示level
         font = pygame.font.SysFont('Arial', 20)
         text_surface = font.render('level: ' + f"{game_manager.game_level}", True, (255, 255, 255))
-        screen.blit(text_surface, (WINDOW_WIDTH - 120, 90))
+        screen.blit(text_surface, (HORIZONTAL_BLANK * GRID_SIZE + WIDTH * GRID_SIZE + 55, 370))
         pygame.display.update()
 
     pygame.quit()

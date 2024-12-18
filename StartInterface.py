@@ -8,7 +8,7 @@ from src.RankingBoard import RankingBoard
 from src.setting import setting_page
 import src.global_var as global_var
 
-# initialize
+# initialize  
 pygame.init()
 pygame.mixer.init()
 
