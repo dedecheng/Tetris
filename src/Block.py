@@ -1,7 +1,6 @@
 from enum import Enum
 
 
-
 class BlockType(Enum):
     I = 0
     J = 1
@@ -52,6 +51,7 @@ class Block:
         (119, 97, 63)
 
     ]
+
     def __init__(self, block_type, direction, x, y):
         self.cells = self.initial_cell(block_type)  # 相對於重心的位置
         self.pos = [x, y]  # 重心的 (x, y) 座標
@@ -76,5 +76,3 @@ class Block:
             return [(-1, 0), (0, 1), (0, 0), (1, 0)]  # T 型
         else:
             return []  # 默認情況返回空
-
-

@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import sys
 
+
 class RankingBoard:
     def __init__(self):
         root_dir = Path(__file__).parent.parent
@@ -39,8 +40,6 @@ class RankingBoard:
         # 保存到 JSON 文件
         with open(self.ranking_file, "w", encoding="utf-8") as file:
             json.dump(self.rankings, file, ensure_ascii=False, indent=4)
-
-
 
     def render(self):
         screen = pygame.display.set_mode((800, 600))

@@ -1,6 +1,6 @@
 import pygame, sys
 
-#screen size
+# screen size
 SCREENWIDTH = 720
 SCREENHEIGHT = 540
 
@@ -10,6 +10,7 @@ pygame.init()
 # setting font
 def get_font(size):  # Returns Press-Start-2P in the desired size
     return pygame.font.Font(pygame.font.match_font("../assets/font/comic.ttf"), size)
+
 
 class InputBox():
     def __init__(self, x, y, width, height, font, text_color, box_color, active_color, label=""):
@@ -45,8 +46,10 @@ class InputBox():
 
     def draw(self, screen):
         # Draw the larger background rectangle that contains the input box and the label
-        pygame.draw.rect(screen, "#FFFFFF", (self.full_rect.x - 10, self.full_rect.y - 10, self.full_rect.width + 20, self.full_rect.height + 20), border_radius = 10)
-        pygame.draw.rect(screen, "#6BAEB9", self.full_rect, border_radius = 10)
+        pygame.draw.rect(screen, "#FFFFFF", (
+        self.full_rect.x - 10, self.full_rect.y - 10, self.full_rect.width + 20, self.full_rect.height + 20),
+                         border_radius=10)
+        pygame.draw.rect(screen, "#6BAEB9", self.full_rect, border_radius=10)
         # Draw the label (instruction) text above the input box
         if self.label:
             label_surface = self.label_font.render(self.label, True, self.text_color)

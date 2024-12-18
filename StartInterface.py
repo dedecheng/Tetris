@@ -1,18 +1,16 @@
-from math import radians
-
 from src.Button import Button, RectButton, CircleButton
 from src.InputBox import InputBox
 import pygame, sys
 from src.GameWindow import game_loop
 from src.RankingBoard import RankingBoard
-from src.setting import setting_page
-import src.global_var as global_var
+from src.SettingWindow import setting_page
+import src.GlobalVar as global_var
 
 # initialize  
 pygame.init()
 pygame.mixer.init()
 
-#screen size
+# screen size
 SCREENWIDTH = 720
 SCREENHEIGHT = 540
 SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
@@ -46,16 +44,17 @@ new_width = QUIT_BUTTON.get_width() * 0.5
 new_height = QUIT_BUTTON.get_height() * 0.5
 SMALL_QUIT = pygame.transform.smoothscale(QUIT_BUTTON, (new_width, new_height))
 
+
 # setting font
 def get_font(size):  # Returns Press-Start-2P in the desired size
     return pygame.font.Font(pygame.font.match_font('arialblack'), size)
+
 
 def play():
     game_loop()
     # while True:
     #     SCREEN.fill("#2B6169")
     #     pygame.display.update()
-
 
 
 def main_menu():
@@ -69,11 +68,12 @@ def main_menu():
     QUIT_BTN = CircleButton(SCREENWIDTH * 0.906, SCREENHEIGHT - SMALL_QUIT.get_height() * 1, 30, "", get_font(30),
                             "#6BAEB9", "#2B6169", "#FFFFFF")
     RANK_BTN = CircleButton(425, 325, 45, "RANK", get_font(25), "#2B6169", "#F9BC60", "#FFFFFF")
-    OPTION_BTN =  CircleButton(525, 325, 45, "SET", get_font(25), "#2B6169", "#30AB3D", "#FFFFFF")
+    OPTION_BTN = CircleButton(525, 325, 45, "SET", get_font(25), "#2B6169", "#30AB3D", "#FFFFFF")
     input_x = (SCREENWIDTH - 300) // 2
     input_y = (SCREENHEIGHT - 120) // 2
     # input box
-    INPUT_BOX = InputBox(input_x, input_y, width=300, height=120, font=get_font(20), text_color="#004643", box_color="#D9D9D9",
+    INPUT_BOX = InputBox(input_x, input_y, width=300, height=120, font=get_font(20), text_color="#004643",
+                         box_color="#D9D9D9",
                          active_color="#FFFFFF", label="Insert your name:")
 
     while True:
@@ -85,7 +85,8 @@ def main_menu():
         SCREEN.blit(SMALL_BG, (BG_x, BG_y))
 
         MENU_MOUSE_POS = pygame.mouse.get_pos()
-        MENU_MOUSE_RECT = (MENU_MOUSE_POS[0] - 0.8 *MOUSE_IMAGE.get_width(), MENU_MOUSE_POS[1] - 0.75*MOUSE_IMAGE.get_height())
+        MENU_MOUSE_RECT = (
+        MENU_MOUSE_POS[0] - 0.8 * MOUSE_IMAGE.get_width(), MENU_MOUSE_POS[1] - 0.75 * MOUSE_IMAGE.get_height())
         pygame.mixer.music.set_volume(global_var.VOLUME)
 
         # Place images: title, ellipse, quit
@@ -139,6 +140,7 @@ def main_menu():
 
         pygame.display.update()
         clock.tick(60)
+
 
 if __name__ == "__main__":
     main_menu()

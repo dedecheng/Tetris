@@ -2,9 +2,11 @@ import pygame, math
 
 pygame.mixer.init()
 
+
 # setting font
-def get_font(size): # Returns Press-Start-2P in the desired size
+def get_font(size):  # Returns Press-Start-2P in the desired size
     return pygame.font.Font(pygame.font.match_font("./assets/font/STHupo.ttf"), size)
+
 
 class Button:
     click_sound = pygame.mixer.Sound("./assets/music/button-click.wav")
@@ -41,9 +43,11 @@ class Button:
                 return True
         return False
 
+
 class RectButton(Button):
     def __init__(self, x, y, width, height, text, font, color, hover_color, text_color):
         super().__init__(x, y, width, height, text, font, color, hover_color, text_color)
+
     def draw(self, screen):
         # Check if the mouse is hovered over the button
         mouse_pos = pygame.mouse.get_pos()
@@ -58,11 +62,12 @@ class RectButton(Button):
         text_rect = text_surface.get_rect(center=self.rect.center)
         screen.blit(text_surface, text_rect)
 
+
 class CircleButton(Button):
     def __init__(self, x, y, radius, text, font, color, hover_color, text_color):
         # For CircleButton, we store a radius instead of width/height
         self.radius = radius
-        super().__init__(x - radius, y - radius, 2*radius, 2*radius, text, font, color, hover_color, text_color)
+        super().__init__(x - radius, y - radius, 2 * radius, 2 * radius, text, font, color, hover_color, text_color)
 
     def draw(self, screen):
         # Check if the mouse is hovered over the button

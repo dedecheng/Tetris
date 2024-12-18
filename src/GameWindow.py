@@ -1,13 +1,9 @@
-from tkinter.constants import HORIZONTAL, VERTICAL
-from turtle import Screen
-
 from src import *
 import pygame
 from pygame.locals import *
 
 from src.GameManager import GameState
-import src.global_var as global_var
-import math
+import src.GlobalVar as global_var
 from pathlib import Path
 
 pygame.init()
@@ -26,13 +22,13 @@ PREVIEW_WIDTH = 5  # 預覽區域的寬度（以格子為單位）
 PREVIEW_HEIGHT = 13  # 預覽區域的高度（以格子為單位）
 PREVIEW_GRID_SIZE = GRID_SIZE // 2  # 預覽區域內方塊縮小一半
 INIT_FALL_SPEED = 500  # 每 500 毫秒下墜一次
-LINES_TO_SPEEDUP = 5 
+LINES_TO_SPEEDUP = 5
 
 root_dir = Path(__file__).parent.parent
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris")
 clock = pygame.time.Clock()
-bord_width = 2 
+bord_width = 2
 max_touch_ground_number = 10
 line_color = (255, 255, 255)  # 灰色
 transparency = 75
@@ -66,7 +62,6 @@ def initialize():
 
     background_image = pygame.image.load(str(root_dir) + r'.\assets\pictures\Group 6.png')
     background_image = pygame.transform.scale(background_image, (780, WINDOW_HEIGHT))
-
 
     INIT_FALL_SPEED = max(1000 - global_var.SPEED * 100, 10)
 
@@ -240,7 +235,6 @@ def game_loop():
                     border_radius=5
                 )
 
-
         # 繪製落下位置
         transparency_surface = pygame.Surface((GRID_SIZE, GRID_SIZE), pygame.SRCALPHA)
         for x, y in game_manager.preview_block.cells:
@@ -252,7 +246,7 @@ def game_loop():
                 transparency_surface.fill((color[0], color[1], color[2], transparency))
                 screen.blit(transparency_surface,
                             ((x + HORIZONTAL_BLANK) * GRID_SIZE, (HEIGHT - y - 1 + VERTICAL_BLANK) * GRID_SIZE))
-                
+
         pygame.draw.rect(
             screen,
             (255, 255, 255),  # preview border
@@ -284,7 +278,7 @@ def game_loop():
                 HORIZONTAL_BLANK * GRID_SIZE - 125,  # 邊框左上角 X（稍微向左偏移）
                 VERTICAL_BLANK * GRID_SIZE + 15,  # 邊框左上角 Y（稍微向上偏移）
                 PREVIEW_WIDTH * PREVIEW_GRID_SIZE + 21,  # 寬度（稍微增寬）
-                PREVIEW_HEIGHT * PREVIEW_GRID_SIZE - 70 # 高度（稍微增高）
+                PREVIEW_HEIGHT * PREVIEW_GRID_SIZE - 70  # 高度（稍微增高）
             ),
             7,  # 邊框厚度
             border_radius=5
@@ -297,7 +291,7 @@ def game_loop():
                 HORIZONTAL_BLANK * GRID_SIZE - 120,  # 預覽框左上角 X
                 VERTICAL_BLANK * GRID_SIZE + 20,  # 預覽框左上角 Y
                 PREVIEW_WIDTH * PREVIEW_GRID_SIZE + 11,  # 預覽框寬度
-                PREVIEW_HEIGHT * PREVIEW_GRID_SIZE -80 # 預覽框高度
+                PREVIEW_HEIGHT * PREVIEW_GRID_SIZE - 80  # 預覽框高度
             )
         )
 
@@ -311,12 +305,13 @@ def game_loop():
                         screen,
                         color,
                         (
-                            (x + HORIZONTAL_BLANK + WIDTH) * PREVIEW_GRID_SIZE + ((HORIZONTAL_BLANK + WIDTH) * PREVIEW_GRID_SIZE) + 83,
+                            (x + HORIZONTAL_BLANK + WIDTH) * PREVIEW_GRID_SIZE + (
+                                        (HORIZONTAL_BLANK + WIDTH) * PREVIEW_GRID_SIZE) + 83,
                             ((preview_num + 1) * 3 - y + VERTICAL_BLANK) * PREVIEW_GRID_SIZE + 30,
                             PREVIEW_GRID_SIZE,
                             PREVIEW_GRID_SIZE
                         ),
-                        border_radius= 2
+                        border_radius=2
                     )
 
         # 繪製 hold 方塊
@@ -356,11 +351,15 @@ def game_loop():
             GG = pygame.image.load("./assets/pictures/GG.png")
             STAR = pygame.image.load("./assets/pictures/star.png")
             screen.blit(GG, ((WINDOW_WIDTH - GG.get_width()) // 2, (WINDOW_HEIGHT - GG.get_height()) // 2))
-            screen.blit(STAR, (((WINDOW_WIDTH - GG.get_width()) // 2 - STAR.get_width()//3), (WINDOW_HEIGHT - GG.get_height()) //2))
-            screen.blit(STAR, (((WINDOW_WIDTH - GG.get_width()) // 2 + STAR.get_width() * 1.5), (WINDOW_HEIGHT - GG.get_height()) //2 + STAR.get_height()))
+            screen.blit(STAR, (
+            ((WINDOW_WIDTH - GG.get_width()) // 2 - STAR.get_width() // 3), (WINDOW_HEIGHT - GG.get_height()) // 2))
+            screen.blit(STAR, (((WINDOW_WIDTH - GG.get_width()) // 2 + STAR.get_width() * 1.5),
+                               (WINDOW_HEIGHT - GG.get_height()) // 2 + STAR.get_height()))
             STAR = pygame.transform.smoothscale(STAR, (STAR.get_width() * 0.5, STAR.get_height() * 0.5))
-            screen.blit(STAR, (((WINDOW_WIDTH - GG.get_width()) // 2 + STAR.get_width()//3), (WINDOW_HEIGHT - GG.get_height()) //2))
-            screen.blit(STAR, (((WINDOW_WIDTH - GG.get_width()) // 2 + STAR.get_width() * 3), (WINDOW_HEIGHT - GG.get_height()) //2 + STAR.get_height()))
+            screen.blit(STAR, (
+            ((WINDOW_WIDTH - GG.get_width()) // 2 + STAR.get_width() // 3), (WINDOW_HEIGHT - GG.get_height()) // 2))
+            screen.blit(STAR, (((WINDOW_WIDTH - GG.get_width()) // 2 + STAR.get_width() * 3),
+                               (WINDOW_HEIGHT - GG.get_height()) // 2 + STAR.get_height()))
             font = pygame.font.SysFont('Arialblack', 80)
             text_surface = font.render('Game Over', True, "#000000")
             text_rect = text_surface.get_rect(center=(WINDOW_WIDTH / 2, (WINDOW_HEIGHT / 2) + 200))

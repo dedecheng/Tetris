@@ -1,20 +1,18 @@
 from copy import deepcopy
-
-from pygame.draw import lines
-
 from src import *
 import random
-import queue
 from collections import deque
 from enum import Enum
 import json
 import os
 from pathlib import Path
 
+
 class GameState(Enum):
     Playing = 0
     GameOver = 1
     Paused = 2
+
 
 class GameManager:
     def __init__(self, w, h):
@@ -64,7 +62,7 @@ class GameManager:
     def hold_block(self):
         if self.is_hold:
             return
-        if self.hold == None :
+        if self.hold == None:
             self.hold = Block(self.current_block.type, Direction.initial, self.generate_pos[0], self.generate_pos[1])
             self.current_block = self.next_block()
         else:
@@ -91,10 +89,9 @@ class GameManager:
             pass
         self.update_preview_block()
 
-
     def kick_wall(self, new_cells, old_direction, new_direction):
         if self.current_block.type == BlockType.O:
-            return False # O 型不需要 wall kick
+            return False  # O 型不需要 wall kick
         elif self.current_block.type == BlockType.I:
             offsets = Block.WALL_KICKS_I.get((old_direction, new_direction), [(0, 0)])
         else:
@@ -132,7 +129,6 @@ class GameManager:
 
         self.update_preview_block()
 
-
     def move_left(self):
         self.current_block.pos[0] -= 1
         if not is_valid(self.current_block, self.board):
@@ -141,7 +137,6 @@ class GameManager:
             self.last_move_rotate = False
         self.update_preview_block()
 
-
     def move_down(self):
         self.current_block.pos[1] -= 1
         if not is_valid(self.current_block, self.board):
@@ -149,7 +144,6 @@ class GameManager:
         else:
             self.last_move_rotate = False
         self.update_preview_block()
-
 
     def straight_down(self):
         for _ in range(self.board.height):
@@ -171,17 +165,15 @@ class GameManager:
 
         # 更新遊戲狀態
         if self.check_gameover():
-             return
+            return
         # TODO
         # 放完之後，生成新方塊
         self.current_block = self.next_block()
 
         self.update_preview_block()
 
-
         # 更新is_hold
         self.is_hold = False
-
 
     def next_block(self):
         # 方塊類型列表（俄羅斯方塊的 7 種形狀）
@@ -241,7 +233,7 @@ class GameManager:
                     block_corner += 1
                 if self.board.board[y - 1][x + 1] == None:
                     block_corner += 1
-            else :
+            else:
                 if self.board.board[y + 1][x - 1] == None:
                     block_corner += 1
                 if self.board.board[y + 1][x + 1] == None:
@@ -271,6 +263,7 @@ class GameManager:
                 self.score += 500
             elif lines == 4:
                 self.score += 800
+
     def record_score(self):
 
         file_path = self.json_file_path
@@ -289,7 +282,7 @@ class GameManager:
                     rank -= 1
                 else:
                     break
-            #比前十名更高分
+            # 比前十名更高分
             if not rank == 10:
                 new_score = {"name": self.player_name, "line": self.line_cleared, "score": self.score}
                 if len(data) <= rank:
@@ -302,12 +295,10 @@ class GameManager:
 
         else:
             data = []
-            first_score = {"name" : self.player_name, "line" : self.line_cleared, "score" : self.score}
+            first_score = {"name": self.player_name, "line": self.line_cleared, "score": self.score}
             data.append(first_score)
             with open(file_path, "w", encoding="utf-8") as file:
                 json.dump(data, file, ensure_ascii=False, indent=4)
-
-
 
 
 def is_valid(block, board):
